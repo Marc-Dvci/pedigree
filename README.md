@@ -25,7 +25,7 @@ I led AI use cases for an internal-audit function, and the first question about 
 | Criterion | Where it is answered |
 |---|---|
 | Relate and connected context | [How it uses Relate](#how-it-uses-relate): inherited terms are a variable-length walk up the family tree in Cypher ([`pedigree/checks.py`](pedigree/checks.py)), over 213,928 models in one `.rl` file |
-| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 41 tests and 8 browser tests |
+| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 43 tests and 8 browser tests |
 | Usefulness | [Use case](#use-case), [Results](#results): figures on the whole Hugging Face snapshot |
 | Documentation and reproducibility | [Run it](#run-it) needs no keys; `python -m pedigree build --revision <commit>` rebuilds the graph from the pinned snapshot |
 | Creativity | Licence clauses as graph nodes that flow down `DERIVED_FROM` edges, checked at the moment an agent is about to download |
@@ -208,7 +208,7 @@ never downloaded): `pip install -r requirements-build.txt`, then
 `python -m pedigree build --revision be6e07669ad32d67b5b0859cf45dd16493fed4b3`. With the Relate CLI on the path, the
 build ends with `relate clone`, which compacts the file to 16.5 MB.
 
-Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 41 tests run in a new random
+Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 43 tests run in a new random
 order each time; they cover 99% of the decision core's lines and 95% of its branches.
 `cd web && npm ci && node test/parity.mjs` checks the browser code against the command line, 9 of 9 models.
 `python -m playwright install chromium`, then `python -m pytest -m e2e` drives the page in Chromium: 8 tests, including

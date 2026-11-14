@@ -27,12 +27,20 @@ person; the wording on every surface is "declared terms differ from upstream ter
 
 ## Evaluation
 
-{{SYSTEM_CARD_EVAL}}
+- **The checks.** 41 tests build small family trees with the real builder and check every rule: a fine-tune inherits
+  every obligation of its ancestors' licences, the nearest ancestor is named with its path, a merge inherits from both
+  parents, a quantisation inherits but is not a newly trained model, and a licence named only in the card
+  (`license:other`) claims no difference. They cover 99% of the decision core's lines and 95% of its branches.
+- **The browser.** The page's code gives the Python answers on 7 of 7 models ([`web/test/parity.mjs`](../web/test/parity.mjs)).
+- **The agent.** On 21 real models, three times each, Qwen 3.8 Flash named the licences a model inherits correctly 27
+  times in 63 from the model's card, and 63 times in 63 with the Pedigree tools. On the 5 models whose family tree
+  carries more than one licence: 0 of 15 from the card, 15 of 15 with the tools. The answers come from the graph and
+  were committed before the model ran ([`evidence/agent-eval/`](../evidence/agent-eval/)).
 
 ## Human oversight
 
 - The obligations table is written by a person from the licence texts and committed before the engine runs.
-- The hook reports to the agent and the person; it does not remove or change any model.
+- The hook reports to the agent and the person, and the download decision stays with them.
 - A finding names the clause and links to the licence text.
 
 ## How a correction is made

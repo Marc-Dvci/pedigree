@@ -25,7 +25,7 @@ I led AI use cases for an internal-audit function, and the first question about 
 | Criterion | Where it is answered |
 |---|---|
 | Relate and connected context | [How it uses Relate](#how-it-uses-relate): inherited terms are a variable-length walk up the family tree in Cypher ([`pedigree/checks.py`](pedigree/checks.py)), over 213,928 models in one `.rl` file |
-| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 39 tests |
+| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 41 tests and 8 browser tests |
 | Usefulness | [Use case](#use-case), [Results](#results): figures on the whole Hugging Face snapshot |
 | Documentation and reproducibility | [Run it](#run-it) needs no keys; `python -m pedigree build --revision <commit>` rebuilds the graph from the pinned snapshot |
 | Creativity | Licence clauses as graph nodes that flow down `DERIVED_FROM` edges, checked at the moment an agent is about to download |
@@ -33,11 +33,19 @@ I led AI use cases for an internal-audit function, and the first question about 
 
 ## See it work
 
-![The Pedigree page for NousResearch/Hermes-3-Llama-3.1-8B: the model on the left with its declared licence stamp, its parent meta-llama/Llama-3.1-8B to the right with the Llama 3.1 stamp, and below, the Llama 3.1 obligations it inherits with their clauses](docs/page-terms.png)
+![The page tracing three models: NousResearch/Hermes-3-Llama-3.1-8B with its Llama 3.1 parent; a merge of nine 70B models whose family tree carries Llama 3, 3.1 and 3.3 licence stamps; and Comfy-Org/Qwen-Image-2.1 below a research-only licence](docs/examples.gif)
 
 The page runs Relate 1.0.1 in the browser tab, compiled to WebAssembly, on a slice of the graph: the most downloaded
 models under each licence with obligations, with all their ancestors (1,280 models). It runs the same Cypher as the
 command line, and a [parity check](web/test/parity.mjs) proves the two give the same answers.
+
+![The pedigree of zerofata/L3.3-GeneticLemonade-Final-v2-70B as a stud-book chart: the model on the left, a fine-tune of a merge of nine 70B models, each with its licence stamp (Llama 3, Llama 3.3, or no licence tag), and their own parents, Llama 3.3 and Llama 3.1, further right](docs/page-pedigree.png)
+
+A merge carries every parent's terms. This one declares `llama3`; its family tree also carries Llama 3.1 and Llama
+3.3, whose attribution and naming clauses are worded differently, and its name does not begin with "Llama 3" as the
+Llama 3 licence asks.
+
+![The inherited terms of NousResearch/Hermes-3-Llama-3.1-8B: Llama 3.1 from meta-llama/Llama-3.1-8B, with each obligation, its clause and quoted text](docs/page-terms.png)
 
 A coding agent about to download a model hears about its pedigree first. The repository's Claude Code hook runs before
 every command and file edit:
@@ -52,7 +60,8 @@ NousResearch/Hermes-3-Llama-3.1-8B: declares llama3
     attribution: clause 1.b.i(B): prominently display "Built with Llama" on a related website, user interface, ...
     naming: clause 1.b.i: include "Llama" at the beginning of any such AI model name
     ...
-  Declared terms differ from upstream terms: attribution, naming, notice, use_policy, user_threshold
+  Declared terms differ from upstream terms: attribution, naming
+  Name: llama3.1 clause 1.b.i asks derivative models to begin with 'Llama'
 ```
 
 ## Use case
@@ -117,7 +126,21 @@ RETURN l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, c
 | MCP server, `python -m pedigree mcp` ([`.mcp.json`](.mcp.json)) | `check_model`, `find_models`, `get_schema` and a read-only `read_cypher` |
 | Agent skill ([`.claude/skills/pedigree/SKILL.md`](.claude/skills/pedigree/SKILL.md), [`AGENTS.md`](AGENTS.md)) | When to check a model, and the rule to quote the clause the tool returns |
 
-{{AGENT_EVAL}}
+**Agent evaluation.** Qwen 3.8 Flash answered the same question about 21 real models, three times each: which
+licences' terms does this model inherit from the models it was built on? The models were picked by a fixed rule (under
+each licence with obligations, the two most downloaded third-party models that declare a different licence), and the
+answers were taken from the graph and committed at [`057ce1b`](https://github.com/Marc-Dvci/pedigree/commit/057ce1b),
+before the model ran ([`experiments/agent_eval.py`](experiments/agent_eval.py),
+[`evidence/agent-eval/`](evidence/agent-eval/)).
+
+| How the model answered | Correct | Median seconds per answer | Output tokens per answer |
+|---|---|---|---|
+| Reading the model's own Hugging Face card | 27 of 63 | 63 | 9,003 |
+| Calling the Pedigree tools on Relate | **63 of 63** | 27 | 766 |
+
+Five of the models carry more than one licence in their family tree, such as a Llama 3.3 quantisation that also
+inherits Llama 3.1's terms. Reading the card, the model got 0 of their 15 answers right; with the tools, 15 of 15. A
+licence written out in full counts as its id when grading (`mistral-research-license` for `mrl`).
 
 ## Results
 
@@ -183,9 +206,31 @@ never downloaded): `pip install -r requirements-build.txt`, then
 `python -m pedigree build --revision be6e07669ad32d67b5b0859cf45dd16493fed4b3`. With the Relate CLI on the path, the
 build ends with `relate clone`, which compacts the file to 16.5 MB.
 
-Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 39 tests run in a new random
+Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 41 tests run in a new random
 order each time; they cover 99% of the decision core's lines and 95% of its branches.
-`cd web && npm ci && node test/parity.mjs` checks the browser code against the command line.
+`cd web && npm ci && node test/parity.mjs` checks the browser code against the command line, 9 of 9 models.
+`python -m playwright install chromium`, then `python -m pytest -m e2e` drives the page in Chromium: 8 tests, including
+an axe-core scan with no serious accessibility violation.
+
+## What it will not do
+
+- Decide for anyone. A finding names the clause, quotes it and links to the licence text; the wording is "declared terms
+  differ from upstream terms", and reading the licence stays with the person.
+- Claim a difference it cannot see. A model that declares `license:other` names its licence only in its card, so its
+  declared terms are reported as named in the card, and no difference is claimed.
+- Download anything. The hook reads the command or the code an agent is about to run, and the graph is a local file.
+
+## Claims
+
+| Claim | Code | Test |
+|---|---|---|
+| A fine-tune inherits every obligation of its ancestors' licences, from the nearest ancestor, with the path | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
+| A declared licence differs only where its wording differs (Llama 3 under Llama 3.1: attribution and naming) | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
+| A merge inherits from both parents; a quantisation inherits but is not a newly trained model | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
+| The hook finds model ids in nine download forms | [`detect.py`](pedigree/detect.py) | [`test_detect.py`](tests/test_detect.py) |
+| Lineage handles renamed ids, case, self-loops and merges | [`lineage.py`](pedigree/lineage.py) | [`test_lineage.py`](tests/test_lineage.py) |
+| The browser page gives the command line's answers | [`web/js/pedigree.js`](web/js/pedigree.js) | [`parity.mjs`](web/test/parity.mjs), [`test_web_parity.py`](tests/test_web_parity.py) |
+| Every part of the page answers in a real browser, with no serious accessibility violation | [`web/js/app.js`](web/js/app.js) | [`test_page.py`](tests/test_page.py) |
 
 ## Where the data lives
 

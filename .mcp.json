@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pedigree": {
+      "command": "python",
+      "args": ["-m", "pedigree", "mcp"]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "card": {
+    "answers": 63,
+    "correct": 27,
+    "tool_calls": 0,
+    "prompt_tokens": 185334,
+    "share": 0.429
+  },
+  "tools": {
+    "answers": 63,
+    "correct": 63,
+    "tool_calls": 356,
+    "prompt_tokens": 808352,
+    "share": 1.0
+  }
+}

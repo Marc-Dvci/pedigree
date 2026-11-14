@@ -201,8 +201,21 @@ def parse(text: str) -> Any:
         return None
 
 
+# A licence written out in full counts as its id: the grade is about which terms, not how they are spelled.
+ALIASES = {
+    "mistral-research-license": "mrl",
+    "mistral-ai-research-license": "mrl",
+    "mistral-non-production-license": "mnpl",
+    "mistral-ai-non-production-license": "mnpl",
+    "qwen-research-license": "qwen-research",
+}
+
+
 def correct(truth: list[str], given: Any) -> bool:
-    return isinstance(given, list) and {str(x).strip().lower() for x in given} == {t.lower() for t in truth}
+    if not isinstance(given, list):
+        return False
+    said = {ALIASES.get(str(x).strip().lower(), str(x).strip().lower()) for x in given}
+    return said == {t.lower() for t in truth}
 
 
 def grade(items: list[dict[str, Any]], runs: list[dict[str, Any]]) -> dict[str, Any]:

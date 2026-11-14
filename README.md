@@ -124,7 +124,7 @@ RETURN l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, c
 
 | Piece | What the agent gets |
 |---|---|
-| Pre-download hook ([`.claude/settings.json`](.claude/settings.json)) | Before any Bash command or file edit, [`detect.py`](pedigree/detect.py) finds the model ids it would download (`from_pretrained`, `pipeline`, `hf download`, `huggingface-cli download`, `snapshot_download`, `vllm serve`, `ollama run hf.co/...`, `-hf`) and returns their inherited terms to the agent |
+| Pre-download hook ([`.claude/settings.json`](.claude/settings.json)) | Before any Bash command or file edit, [`detect.py`](pedigree/detect.py) finds the model ids it would download (`from_pretrained`, `pipeline`, `hf download`, `huggingface-cli download`, `snapshot_download`, `vllm serve`, `ollama run hf.co/...`, `-hf`) and returns their inherited terms to the agent; [a real session](examples/agent-session.md) |
 | MCP server, `python -m pedigree mcp` ([`.mcp.json`](.mcp.json)) | `check_model`, `find_models`, `get_schema` and a read-only `read_cypher` |
 | Agent skill ([`.claude/skills/pedigree/SKILL.md`](.claude/skills/pedigree/SKILL.md), [`AGENTS.md`](AGENTS.md)) | When to check a model, and the rule to quote the clause the tool returns |
 

@@ -9,3 +9,8 @@ pedigree.rl binary
 *.gif binary
 *.gz binary
 *.parquet binary
+
+# Keep the languages bar honest: generated data does not count as code.
+web/data/** linguist-generated
+evidence/** linguist-generated
+sources/*.json linguist-generated

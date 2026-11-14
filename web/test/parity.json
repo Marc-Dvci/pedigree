@@ -1,0 +1,407 @@
+[
+  {
+    "model": "NousResearch/Hermes-3-Llama-3.1-8B",
+    "declared": "llama3",
+    "upstream_licences": [
+      "llama3.1"
+    ],
+    "inherited": [
+      [
+        "llama3.1",
+        "attribution",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "NousResearch/Hermes-3-Llama-3.1-8B",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "naming",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "NousResearch/Hermes-3-Llama-3.1-8B",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "notice",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "NousResearch/Hermes-3-Llama-3.1-8B",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "use_policy",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "NousResearch/Hermes-3-Llama-3.1-8B",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "user_threshold",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "NousResearch/Hermes-3-Llama-3.1-8B",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "llama3.1",
+        "attribution"
+      ],
+      [
+        "llama3.1",
+        "naming"
+      ],
+      [
+        "llama3.1",
+        "notice"
+      ],
+      [
+        "llama3.1",
+        "use_policy"
+      ],
+      [
+        "llama3.1",
+        "user_threshold"
+      ]
+    ],
+    "naming": [
+      [
+        "llama3.1",
+        "Llama"
+      ]
+    ]
+  },
+  {
+    "model": "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+    "declared": "llama3.2",
+    "upstream_licences": [
+      "llama3.2"
+    ],
+    "inherited": [
+      [
+        "llama3.2",
+        "attribution",
+        "meta-llama/Llama-3.2-1B-Instruct",
+        [
+          "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+          "meta-llama/Llama-3.2-1B-Instruct"
+        ]
+      ],
+      [
+        "llama3.2",
+        "naming",
+        "meta-llama/Llama-3.2-1B-Instruct",
+        [
+          "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+          "meta-llama/Llama-3.2-1B-Instruct"
+        ]
+      ],
+      [
+        "llama3.2",
+        "notice",
+        "meta-llama/Llama-3.2-1B-Instruct",
+        [
+          "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+          "meta-llama/Llama-3.2-1B-Instruct"
+        ]
+      ],
+      [
+        "llama3.2",
+        "use_policy",
+        "meta-llama/Llama-3.2-1B-Instruct",
+        [
+          "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+          "meta-llama/Llama-3.2-1B-Instruct"
+        ]
+      ],
+      [
+        "llama3.2",
+        "user_threshold",
+        "meta-llama/Llama-3.2-1B-Instruct",
+        [
+          "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+          "meta-llama/Llama-3.2-1B-Instruct"
+        ]
+      ]
+    ],
+    "differs": [],
+    "naming": []
+  },
+  {
+    "model": "jinaai/jina-embeddings-v5-text-small-retrieval",
+    "declared": "cc-by-nc-4.0",
+    "upstream_licences": [
+      "apache-2.0",
+      "cc-by-nc-4.0"
+    ],
+    "inherited": [
+      [
+        "apache-2.0",
+        "notice",
+        "Qwen/Qwen3-0.6B-Base",
+        [
+          "jinaai/jina-embeddings-v5-text-small-retrieval",
+          "jinaai/jina-embeddings-v5-text-small",
+          "Qwen/Qwen3-0.6B-Base"
+        ]
+      ],
+      [
+        "cc-by-nc-4.0",
+        "attribution",
+        "jinaai/jina-embeddings-v5-text-small",
+        [
+          "jinaai/jina-embeddings-v5-text-small-retrieval",
+          "jinaai/jina-embeddings-v5-text-small"
+        ]
+      ],
+      [
+        "cc-by-nc-4.0",
+        "non_commercial",
+        "jinaai/jina-embeddings-v5-text-small",
+        [
+          "jinaai/jina-embeddings-v5-text-small-retrieval",
+          "jinaai/jina-embeddings-v5-text-small"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "apache-2.0",
+        "notice"
+      ]
+    ],
+    "naming": []
+  },
+  {
+    "model": "Comfy-Org/Qwen-Image-2.1",
+    "declared": "other",
+    "upstream_licences": [
+      "qwen-research"
+    ],
+    "inherited": [
+      [
+        "qwen-research",
+        "attribution",
+        "Qwen/Qwen-Image-2.1",
+        [
+          "Comfy-Org/Qwen-Image-2.1",
+          "Qwen/Qwen-Image-2.1"
+        ]
+      ],
+      [
+        "qwen-research",
+        "non_commercial",
+        "Qwen/Qwen-Image-2.1",
+        [
+          "Comfy-Org/Qwen-Image-2.1",
+          "Qwen/Qwen-Image-2.1"
+        ]
+      ],
+      [
+        "qwen-research",
+        "notice",
+        "Qwen/Qwen-Image-2.1",
+        [
+          "Comfy-Org/Qwen-Image-2.1",
+          "Qwen/Qwen-Image-2.1"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "qwen-research",
+        "attribution"
+      ],
+      [
+        "qwen-research",
+        "non_commercial"
+      ],
+      [
+        "qwen-research",
+        "notice"
+      ]
+    ],
+    "naming": []
+  },
+  {
+    "model": "Comfy-Org/ltx-2",
+    "declared": "other",
+    "upstream_licences": [
+      "gemma"
+    ],
+    "inherited": [
+      [
+        "gemma",
+        "notice",
+        "google/gemma-3-12b-it",
+        [
+          "Comfy-Org/ltx-2",
+          "google/gemma-3-12b-it"
+        ]
+      ],
+      [
+        "gemma",
+        "use_policy",
+        "google/gemma-3-12b-it",
+        [
+          "Comfy-Org/ltx-2",
+          "google/gemma-3-12b-it"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "gemma",
+        "notice"
+      ],
+      [
+        "gemma",
+        "use_policy"
+      ]
+    ],
+    "naming": []
+  },
+  {
+    "model": "casperhansen/llama-3.3-70b-instruct-awq",
+    "declared": "llama3.3",
+    "upstream_licences": [
+      "llama3.1"
+    ],
+    "inherited": [
+      [
+        "llama3.1",
+        "attribution",
+        "meta-llama/Llama-3.1-70B",
+        [
+          "casperhansen/llama-3.3-70b-instruct-awq",
+          "meta-llama/Llama-3.1-70B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "naming",
+        "meta-llama/Llama-3.1-70B",
+        [
+          "casperhansen/llama-3.3-70b-instruct-awq",
+          "meta-llama/Llama-3.1-70B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "notice",
+        "meta-llama/Llama-3.1-70B",
+        [
+          "casperhansen/llama-3.3-70b-instruct-awq",
+          "meta-llama/Llama-3.1-70B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "use_policy",
+        "meta-llama/Llama-3.1-70B",
+        [
+          "casperhansen/llama-3.3-70b-instruct-awq",
+          "meta-llama/Llama-3.1-70B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "user_threshold",
+        "meta-llama/Llama-3.1-70B",
+        [
+          "casperhansen/llama-3.3-70b-instruct-awq",
+          "meta-llama/Llama-3.1-70B"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "llama3.1",
+        "attribution"
+      ],
+      [
+        "llama3.1",
+        "naming"
+      ],
+      [
+        "llama3.1",
+        "notice"
+      ],
+      [
+        "llama3.1",
+        "use_policy"
+      ],
+      [
+        "llama3.1",
+        "user_threshold"
+      ]
+    ],
+    "naming": []
+  },
+  {
+    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "declared": "llama3.1",
+    "upstream_licences": [
+      "llama3.1"
+    ],
+    "inherited": [
+      [
+        "llama3.1",
+        "attribution",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "meta-llama/Llama-3.1-8B-Instruct",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "naming",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "meta-llama/Llama-3.1-8B-Instruct",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "notice",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "meta-llama/Llama-3.1-8B-Instruct",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "use_policy",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "meta-llama/Llama-3.1-8B-Instruct",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ],
+      [
+        "llama3.1",
+        "user_threshold",
+        "meta-llama/Llama-3.1-8B",
+        [
+          "meta-llama/Llama-3.1-8B-Instruct",
+          "meta-llama/Llama-3.1-8B"
+        ]
+      ]
+    ],
+    "differs": [],
+    "naming": []
+  }
+]

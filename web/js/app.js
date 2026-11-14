@@ -10,6 +10,8 @@ const STAMP = [
   [/openrail/, "#a16207"],
   [/^cc-by-nc/, "#9d174d"],
 ];
+// Licences the Hub tags with their own id; the others are published under `other` with a name in the card.
+const HUB_TAGGED = new Set(["llama3", "llama3.1", "llama3.2", "llama3.3", "gemma", "cc-by-nc-4.0", "creativeml-openrail-m"]);
 const KIND = {
   attribution: "Attribution",
   naming: "Name",
@@ -144,19 +146,18 @@ async function drawStats() {
     .sort((a, b) => b[1].inheritors - a[1].inheritors)
     .map(([lic, s]) => {
       const total = s.inheritors;
-      const bars = (s.declared || [])
-        .map((d) => {
-          const pct = (100 * d.models) / total;
-          const c = d.declared === lic ? colour(lic) : d.declared === "none" ? "#d1d5db" : "#b91c1c";
-          return `<span style="width:${pct}%;background:${c}" title="${esc(d.declared)}: ${d.models}"></span>`;
-        })
-        .join("");
+      const head = `<h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)}: ${total.toLocaleString()} models inherit its terms</h3>`;
+      if (!HUB_TAGGED.has(lic)) {
+        return `<div class="pop">${head}<p class="small">Published under the Hub's <code>other</code> licence id, with its name in the model card.</p></div>`;
+      }
       const same = (s.declared || []).find((d) => d.declared === lic)?.models || 0;
       const none = (s.declared || []).find((d) => d.declared === "none")?.models || 0;
+      const other = total - same - none;
+      const seg = (n, c, label) => (n ? `<span style="width:${(100 * n) / total}%;background:${c}" title="${label}: ${n}"></span>` : "");
+      const bars = seg(same, colour(lic), lic) + seg(other, "#b91c1c", "another licence") + seg(none, "#d1d5db", "none");
       const naming = s.naming ? `<p class="small">${s.naming.prefixed.toLocaleString()} of ${s.naming.trained.toLocaleString()} fine-tunes, adapters and merges begin with “${esc(s.naming.prefix)}”.</p>` : "";
-      return `<div class="pop"><h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)}: ${total.toLocaleString()} models inherit its terms</h3>
-        <div class="bar">${bars}</div>
-        <p class="small">${same.toLocaleString()} declare ${esc(lic)}, ${(total - same - none).toLocaleString()} declare another licence, ${none.toLocaleString()} declare none.</p>${naming}</div>`;
+      return `<div class="pop">${head}<div class="bar">${bars}</div>
+        <p class="small">${same.toLocaleString()} declare ${esc(lic)}, ${other.toLocaleString()} declare another licence, ${none.toLocaleString()} declare none.</p>${naming}</div>`;
     });
   $("#stats").innerHTML = rows.join("");
 }

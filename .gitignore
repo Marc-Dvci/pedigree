@@ -21,3 +21,8 @@ web/dist*/
 data/cache/
 data/runs/
 *.log
+
+# Relate: the build stages its store before compacting it
+*.staging.rl
+*.rl.auth-token
+web/node_modules/

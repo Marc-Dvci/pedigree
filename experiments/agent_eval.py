@@ -47,7 +47,13 @@ SYSTEM = (
 
 
 def choose(conn: relate.Connection) -> list[str]:
-    licences = [r["id"] for r in rows(conn, "MATCH (l:Licence)-[:REQUIRES]->(o:Obligation) WHERE o.kind <> 'notice' RETURN DISTINCT l.id AS id ORDER BY id")]
+    licences = [
+        r["id"]
+        for r in rows(
+            conn,
+            "MATCH (l:Licence)-[:REQUIRES]->(o:Obligation) WHERE o.kind <> 'notice' RETURN DISTINCT l.id AS id ORDER BY id",
+        )
+    ]
     chosen: list[str] = []
     for licence in licences:
         found = rows(
@@ -89,7 +95,9 @@ def fetch_cards() -> None:
     for item in items:
         url = f"https://huggingface.co/{item['id']}/raw/main/README.md"
         try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "pedigree-eval"}), timeout=60) as r:
+            with urllib.request.urlopen(
+                urllib.request.Request(url, headers={"User-Agent": "pedigree-eval"}), timeout=60
+            ) as r:
                 cards[item["id"]] = r.read().decode("utf-8", "replace")[:30_000]
         except OSError as exc:
             cards[item["id"]] = f"(card not available: {exc})"
@@ -124,7 +132,12 @@ def tools_and_runner() -> tuple[list[dict[str, Any]], Any]:
     manager = server._tool_manager  # noqa: SLF001 - the tools exactly as the MCP server registers them
     specs, fns = [], {}
     for tool in manager.list_tools():
-        specs.append({"type": "function", "function": {"name": tool.name, "description": tool.description, "parameters": tool.parameters}})
+        specs.append(
+            {
+                "type": "function",
+                "function": {"name": tool.name, "description": tool.description, "parameters": tool.parameters},
+            }
+        )
         fns[tool.name] = tool.fn
 
     def run(name: str, arguments: dict[str, Any]) -> str:
@@ -136,10 +149,14 @@ def tools_and_runner() -> tuple[list[dict[str, Any]], Any]:
     return specs, run
 
 
-def ask(mode: str, item: dict[str, Any], card: str, url: str, key: str, specs: list[dict[str, Any]], run: Any) -> dict[str, Any]:
+def ask(
+    mode: str, item: dict[str, Any], card: str, url: str, key: str, specs: list[dict[str, Any]], run: Any
+) -> dict[str, Any]:
     messages: list[dict[str, Any]] = [{"role": "system", "content": SYSTEM}]
     if mode == "card":
-        messages.append({"role": "user", "content": f"The model card of {item['id']}:\n\n{card}\n\nQuestion: {item['question']}"})
+        messages.append(
+            {"role": "user", "content": f"The model card of {item['id']}:\n\n{card}\n\nQuestion: {item['question']}"}
+        )
     else:
         messages.append({"role": "user", "content": item["question"]})
     calls: list[dict[str, Any]] = []
@@ -159,7 +176,9 @@ def ask(mode: str, item: dict[str, Any], card: str, url: str, key: str, specs: l
             except ValueError:
                 arguments = {}
             calls.append({"name": call["function"]["name"], "arguments": arguments})
-            messages.append({"role": "tool", "tool_call_id": call["id"], "content": run(call["function"]["name"], arguments)})
+            messages.append(
+                {"role": "tool", "tool_call_id": call["id"], "content": run(call["function"]["name"], arguments)}
+            )
     return {"text": "", "tool_calls": calls, "usage": usage}
 
 

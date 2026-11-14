@@ -1,0 +1,811 @@
+{
+  "licences": {
+    "cc-by-nc-4.0": {
+      "inheritors": 1280,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 485
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 405
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 352
+        },
+        {
+          "declared": "other",
+          "models": 8
+        },
+        {
+          "declared": "llama3.3",
+          "models": 7
+        },
+        {
+          "declared": "llama3",
+          "models": 6
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 5
+        },
+        {
+          "declared": "llama3.1",
+          "models": 4
+        },
+        {
+          "declared": "mit",
+          "models": 3
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 1
+        },
+        {
+          "declared": "gemma",
+          "models": 1
+        },
+        {
+          "declared": "odc-by",
+          "models": 1
+        }
+      ]
+    },
+    "creativeml-openrail-m": {
+      "inheritors": 2,
+      "declared": [
+        {
+          "declared": "creativeml-openrail-m",
+          "models": 2
+        }
+      ]
+    },
+    "deepseek": {
+      "inheritors": 1431,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 966
+        },
+        {
+          "declared": "other",
+          "models": 321
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 104
+        },
+        {
+          "declared": "mit",
+          "models": 27
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 3
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 2
+        },
+        {
+          "declared": "bsd-3-clause",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 1
+        },
+        {
+          "declared": "creativeml-openrail-m",
+          "models": 1
+        },
+        {
+          "declared": "eupl-1.2",
+          "models": 1
+        },
+        {
+          "declared": "unknown",
+          "models": 1
+        }
+      ]
+    },
+    "gemma": {
+      "inheritors": 18201,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 7150
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 5021
+        },
+        {
+          "declared": "gemma",
+          "models": 4435
+        },
+        {
+          "declared": "mit",
+          "models": 627
+        },
+        {
+          "declared": "other",
+          "models": 595
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 129
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 100
+        },
+        {
+          "declared": "gpl-3.0",
+          "models": 37
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 20
+        },
+        {
+          "declared": "mpl-2.0",
+          "models": 16
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 9
+        },
+        {
+          "declared": "eupl-1.2",
+          "models": 7
+        },
+        {
+          "declared": "llama3.2",
+          "models": 7
+        },
+        {
+          "declared": "unknown",
+          "models": 6
+        },
+        {
+          "declared": "llama3.1",
+          "models": 5
+        },
+        {
+          "declared": "openrail",
+          "models": 5
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 4
+        },
+        {
+          "declared": "cc",
+          "models": 4
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 4
+        },
+        {
+          "declared": "cc-by-nc-2.0",
+          "models": 3
+        },
+        {
+          "declared": "osl-3.0",
+          "models": 3
+        },
+        {
+          "declared": "afl-3.0",
+          "models": 2
+        },
+        {
+          "declared": "artistic-2.0",
+          "models": 2
+        },
+        {
+          "declared": "bigscience-openrail-m",
+          "models": 2
+        },
+        {
+          "declared": "unlicense",
+          "models": 2
+        },
+        {
+          "declared": "bigcode-openrail-m",
+          "models": 1
+        },
+        {
+          "declared": "gpl",
+          "models": 1
+        },
+        {
+          "declared": "gpl-2.0",
+          "models": 1
+        },
+        {
+          "declared": "intel-research",
+          "models": 1
+        },
+        {
+          "declared": "lgpl-3.0",
+          "models": 1
+        },
+        {
+          "declared": "llama4",
+          "models": 1
+        }
+      ]
+    },
+    "llama3": {
+      "inheritors": 4336,
+      "declared": [
+        {
+          "declared": "llama3",
+          "models": 1858
+        },
+        {
+          "declared": "none",
+          "models": 1247
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 630
+        },
+        {
+          "declared": "mit",
+          "models": 252
+        },
+        {
+          "declared": "other",
+          "models": 241
+        },
+        {
+          "declared": "llama3.1",
+          "models": 46
+        },
+        {
+          "declared": "llama3.3",
+          "models": 14
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 13
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 9
+        },
+        {
+          "declared": "odc-by",
+          "models": 9
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 3
+        },
+        {
+          "declared": "unlicense",
+          "models": 3
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 2
+        },
+        {
+          "declared": "llama2",
+          "models": 2
+        },
+        {
+          "declared": "afl-3.0",
+          "models": 1
+        },
+        {
+          "declared": "bsl-1.0",
+          "models": 1
+        },
+        {
+          "declared": "gpl-2.0",
+          "models": 1
+        },
+        {
+          "declared": "gpl-3.0",
+          "models": 1
+        },
+        {
+          "declared": "osl-3.0",
+          "models": 1
+        }
+      ],
+      "naming": {
+        "prefix": "Llama 3",
+        "trained": 3772,
+        "prefixed": 652
+      }
+    },
+    "llama3.1": {
+      "inheritors": 12038,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 4825
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 2649
+        },
+        {
+          "declared": "llama3.1",
+          "models": 2516
+        },
+        {
+          "declared": "other",
+          "models": 737
+        },
+        {
+          "declared": "llama3.3",
+          "models": 609
+        },
+        {
+          "declared": "mit",
+          "models": 323
+        },
+        {
+          "declared": "llama3",
+          "models": 205
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 92
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 29
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 19
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 8
+        },
+        {
+          "declared": "llama2",
+          "models": 6
+        },
+        {
+          "declared": "gpl-3.0",
+          "models": 4
+        },
+        {
+          "declared": "llama3.2",
+          "models": 4
+        },
+        {
+          "declared": "unlicense",
+          "models": 3
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 2
+        },
+        {
+          "declared": "bsd-2-clause",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 1
+        },
+        {
+          "declared": "cc0-1.0",
+          "models": 1
+        },
+        {
+          "declared": "eupl-1.2",
+          "models": 1
+        },
+        {
+          "declared": "gfdl",
+          "models": 1
+        },
+        {
+          "declared": "ms-pl",
+          "models": 1
+        },
+        {
+          "declared": "openrail",
+          "models": 1
+        }
+      ],
+      "naming": {
+        "prefix": "Llama",
+        "trained": 10366,
+        "prefixed": 4662
+      }
+    },
+    "llama3.2": {
+      "inheritors": 8598,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 3693
+        },
+        {
+          "declared": "llama3.2",
+          "models": 2415
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 1810
+        },
+        {
+          "declared": "other",
+          "models": 302
+        },
+        {
+          "declared": "mit",
+          "models": 191
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 77
+        },
+        {
+          "declared": "llama3",
+          "models": 28
+        },
+        {
+          "declared": "llama2",
+          "models": 20
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 12
+        },
+        {
+          "declared": "llama3.1",
+          "models": 11
+        },
+        {
+          "declared": "gemma",
+          "models": 8
+        },
+        {
+          "declared": "gpl-3.0",
+          "models": 6
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 5
+        },
+        {
+          "declared": "afl-3.0",
+          "models": 4
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 3
+        },
+        {
+          "declared": "cc",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-2.0",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 2
+        },
+        {
+          "declared": "creativeml-openrail-m",
+          "models": 2
+        },
+        {
+          "declared": "openrail",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 1
+        },
+        {
+          "declared": "unknown",
+          "models": 1
+        },
+        {
+          "declared": "wtfpl",
+          "models": 1
+        }
+      ],
+      "naming": {
+        "prefix": "Llama",
+        "trained": 7338,
+        "prefixed": 4066
+      }
+    },
+    "llama3.3": {
+      "inheritors": 1295,
+      "declared": [
+        {
+          "declared": "llama3.3",
+          "models": 589
+        },
+        {
+          "declared": "none",
+          "models": 465
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 85
+        },
+        {
+          "declared": "mit",
+          "models": 53
+        },
+        {
+          "declared": "other",
+          "models": 44
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 32
+        },
+        {
+          "declared": "llama3",
+          "models": 22
+        },
+        {
+          "declared": "llama3.1",
+          "models": 3
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 1
+        }
+      ],
+      "naming": {
+        "prefix": "Llama",
+        "trained": 1006,
+        "prefixed": 465
+      }
+    },
+    "mnpl": {
+      "inheritors": 16,
+      "declared": [
+        {
+          "declared": "other",
+          "models": 7
+        },
+        {
+          "declared": "none",
+          "models": 5
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 4
+        }
+      ]
+    },
+    "mrl": {
+      "inheritors": 758,
+      "declared": [
+        {
+          "declared": "apache-2.0",
+          "models": 329
+        },
+        {
+          "declared": "none",
+          "models": 309
+        },
+        {
+          "declared": "other",
+          "models": 82
+        },
+        {
+          "declared": "wtfpl",
+          "models": 20
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 5
+        },
+        {
+          "declared": "mit",
+          "models": 5
+        },
+        {
+          "declared": "cc-by-nc-2.0",
+          "models": 3
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 3
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 2
+        }
+      ]
+    },
+    "qwen": {
+      "inheritors": 607,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 362
+        },
+        {
+          "declared": "other",
+          "models": 120
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 88
+        },
+        {
+          "declared": "mit",
+          "models": 24
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 10
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 3
+        }
+      ]
+    },
+    "qwen-research": {
+      "inheritors": 6363,
+      "declared": [
+        {
+          "declared": "none",
+          "models": 2528
+        },
+        {
+          "declared": "apache-2.0",
+          "models": 1945
+        },
+        {
+          "declared": "other",
+          "models": 1559
+        },
+        {
+          "declared": "mit",
+          "models": 276
+        },
+        {
+          "declared": "cc-by-nc-4.0",
+          "models": 15
+        },
+        {
+          "declared": "bigscience-openrail-m",
+          "models": 4
+        },
+        {
+          "declared": "bsd-3-clause",
+          "models": 4
+        },
+        {
+          "declared": "cc-by-4.0",
+          "models": 4
+        },
+        {
+          "declared": "unknown",
+          "models": 4
+        },
+        {
+          "declared": "gpl-3.0",
+          "models": 3
+        },
+        {
+          "declared": "wtfpl",
+          "models": 3
+        },
+        {
+          "declared": "agpl-3.0",
+          "models": 2
+        },
+        {
+          "declared": "cc-by-nc-nd-4.0",
+          "models": 2
+        },
+        {
+          "declared": "creativeml-openrail-m",
+          "models": 2
+        },
+        {
+          "declared": "gemma",
+          "models": 2
+        },
+        {
+          "declared": "openmdw-1.1",
+          "models": 2
+        },
+        {
+          "declared": "afl-3.0",
+          "models": 1
+        },
+        {
+          "declared": "bsd-3-clause-clear",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-nc-2.0",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-nc-sa-4.0",
+          "models": 1
+        },
+        {
+          "declared": "cc-by-sa-4.0",
+          "models": 1
+        },
+        {
+          "declared": "cc0-1.0",
+          "models": 1
+        },
+        {
+          "declared": "llama2",
+          "models": 1
+        },
+        {
+          "declared": "llama3.1",
+          "models": 1
+        }
+      ]
+    }
+  },
+  "excluded_owners": [
+    "meta-llama",
+    "google",
+    "Qwen",
+    "mistralai",
+    "deepseek-ai"
+  ],
+  "snapshot": {
+    "built": "2026-11-14",
+    "dataset": "librarian-bots/model_cards_with_metadata",
+    "families": [
+      "meta-llama",
+      "google",
+      "Qwen",
+      "mistralai",
+      "deepseek-ai"
+    ],
+    "revision": "be6e07669ad32d67b5b0859cf45dd16493fed4b3",
+    "roots": 1866,
+    "rows": 914842,
+    "self_loops": 1235
+  },
+  "seconds": 2.29
+}

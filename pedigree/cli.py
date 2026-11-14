@@ -11,6 +11,9 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -115,12 +118,19 @@ def cmd_build(a: argparse.Namespace) -> int:
     if a.cache and not a.cache.exists():
         save_cache(a.revision, str(a.cache))
     rows = list(read_cache(str(a.cache)) if a.cache else read_rows(a.revision))
-    parsed = parse_rows(rows)
+    # The snapshot leaves out gated repositories (every meta-llama model): add the owners' models from the Hub API.
+    owner_file = ROOT / "sources" / "owner-models.json"
+    owner_rows = json.loads(owner_file.read_text(encoding="utf-8")) if owner_file.exists() else []
+    in_snapshot = {str(r["modelId"]) for r in rows}
+    added = [r for r in owner_rows if r["modelId"] not in in_snapshot]
+    parsed = parse_rows(rows + added)
     roots = family_roots(parsed.models, a.family)
     keep = descendants(parsed.models, roots)
     other = json.loads(a.other_names.read_text(encoding="utf-8")) if a.other_names and a.other_names.exists() else {}
+    staging = a.out.with_name(a.out.stem + ".staging.rl")
+    staging.unlink(missing_ok=True)
     counts = build(
-        a.out,
+        staging,
         parsed.models,
         keep,
         ROOT / "sources",
@@ -135,7 +145,15 @@ def cmd_build(a: argparse.Namespace) -> int:
         },  # fmt: skip
         other,
     )
-    print(json.dumps({"rows": len(rows), "roots": len(roots), **counts}))
+    # Bulk loading leaves a large write-ahead log in the file; `relate clone` writes a compact copy of the same graph.
+    cli = a.relate or shutil.which("relate")
+    a.out.unlink(missing_ok=True)
+    if cli:
+        subprocess.run([cli, "clone", str(staging), str(a.out)], check=True, env={**os.environ, "DO_NOT_TRACK": "1"})
+        staging.unlink()
+    else:
+        staging.rename(a.out)
+    print(json.dumps({"rows": len(rows), "roots": len(roots), "bytes": a.out.stat().st_size, **counts}))
     return 0
 
 
@@ -162,7 +180,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--out", type=Path, default=DEFAULT_STORE)
     s.add_argument("--family", action="append", default=None, help="an owner whose models are family roots")
     s.add_argument("--other-names", type=Path, default=ROOT / "sources" / "other-licence-names.json")
-    s.add_argument("--cache", type=Path, help="a local Parquet copy of the snapshot's lineage columns (made if missing)")
+    s.add_argument("--relate", help="the relate CLI, to compact the result (default: relate on the PATH)")
+    s.add_argument(
+        "--cache", type=Path, help="a local Parquet copy of the snapshot's lineage columns (made if missing)"
+    )
     s.set_defaults(handler=cmd_build)
     s = sub.add_parser("mcp", help="serve the checks over MCP (stdio)")
     s.add_argument("--store", type=Path, default=DEFAULT_STORE)

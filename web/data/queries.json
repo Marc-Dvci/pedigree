@@ -1,0 +1,3 @@
+{
+  "inherited": "\nMATCH p = ANY SHORTEST (m:Model {id: $id})-[:DERIVED_FROM]->{1,30}(a:Model)\nMATCH (a)-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)\nWITH l, o, a, [n IN nodes(p) | n.id] AS chain, [r IN relationships(p) | r.relation] AS relations\nORDER BY size(chain) ASC, a.id ASC\nWITH l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, relations: relations, clause: o.clause, text: o.text, source: o.source})[0] AS nearest\nRETURN licence, kind, nearest\nORDER BY licence, kind\n"
+}

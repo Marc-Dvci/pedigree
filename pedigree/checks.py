@@ -34,9 +34,11 @@ def model(conn: relate.Connection, model_id: str) -> dict[str, Any] | None:
     return row
 
 
+# One shortest path to each ancestor (ANY SHORTEST): dense families of merges have far more paths than ancestors.
 INHERITED = f"""
-MATCH p = (m:Model {{id: $id}})-[:DERIVED_FROM*1..{MAX_DEPTH}]->(a:Model)-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)
-WITH l, o, a, p, [n IN nodes(p) WHERE n:Model | n.id] AS chain, [r IN relationships(p) WHERE type(r) = 'DERIVED_FROM' | r.relation] AS relations
+MATCH p = ANY SHORTEST (m:Model {{id: $id}})-[:DERIVED_FROM]->{{1,{MAX_DEPTH}}}(a:Model)
+MATCH (a)-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)
+WITH l, o, a, [n IN nodes(p) | n.id] AS chain, [r IN relationships(p) | r.relation] AS relations
 ORDER BY size(chain) ASC, a.id ASC
 WITH l.id AS licence, o.kind AS kind, collect({{ancestor: a.id, chain: chain, relations: relations, clause: o.clause, text: o.text, source: o.source}})[0] AS nearest
 RETURN licence, kind, nearest

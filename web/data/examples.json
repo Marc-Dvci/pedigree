@@ -1,0 +1,7 @@
+[
+ "NousResearch/Hermes-3-Llama-3.1-8B",
+ "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
+ "jinaai/jina-embeddings-v5-text-small-retrieval",
+ "Comfy-Org/Qwen-Image-2.1",
+ "Comfy-Org/ltx-2"
+]

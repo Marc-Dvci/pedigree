@@ -11,7 +11,8 @@ from pedigree.checks import MAX_DEPTH, TRAINED, rows
 
 # Models below an ancestor that declares the licence (the ancestor itself excluded).
 UNDER = f"""
-MATCH (l:Licence {{id: $licence}})<-[:DECLARES]-(:Model)<-[:DERIVED_FROM*1..{MAX_DEPTH}]-(m:Model)
+MATCH (l:Licence {{id: $licence}})<-[:DECLARES]-(a:Model)
+MATCH p = ANY SHORTEST (a)<-[:DERIVED_FROM]-{{1,{MAX_DEPTH}}}(m:Model)
 WITH DISTINCT m WHERE NOT m.author IN $exclude
 """
 

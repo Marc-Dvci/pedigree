@@ -41,21 +41,37 @@ def _props(props: dict[str, Any]) -> str:
 
 
 def pick(conn: relate.Connection, per_licence: int) -> list[str]:
-    """The most downloaded models under each licence that carries obligations, and all their ancestors."""
-    licences = [r["id"] for r in rows(conn, "MATCH (l:Licence)-[:REQUIRES]->() RETURN DISTINCT l.id AS id")]
+    """The most downloaded models under each licence that carries obligations beyond a notice, and their ancestors."""
+    # Licences whose obligations go beyond keeping a notice (the permissive licences only ask for that).
+    licences = [
+        r["id"]
+        for r in rows(
+            conn,
+            "MATCH (l:Licence)-[:REQUIRES]->(o:Obligation) WHERE o.kind <> 'notice' RETURN DISTINCT l.id AS id",
+        )
+    ]
     chosen: set[str] = set()
     for licence in licences:
-        top = rows(
-            conn,
-            f"MATCH (:Licence {{id: $l}})<-[:DECLARES]-(:Model)<-[:DERIVED_FROM*1..{MAX_DEPTH}]-(m:Model) "
-            "WITH DISTINCT m ORDER BY m.downloads DESC LIMIT $n RETURN m.id AS id",
-            {"l": licence, "n": per_licence},
-        )
-        chosen.update(r["id"] for r in top)
+        anchors = [
+            r["id"]
+            for r in rows(conn, "MATCH (:Licence {id: $l})<-[:DECLARES]-(a:Model) RETURN a.id AS id", {"l": licence})
+        ]
+        best: dict[str, int] = {}
+        for start in range(0, len(anchors), 200):
+            found = rows(
+                conn,
+                f"UNWIND $anchors AS aid MATCH (a:Model {{id: aid}}) "
+                f"MATCH p = ANY SHORTEST (a)<-[:DERIVED_FROM]-{{1,{MAX_DEPTH}}}(m:Model) "
+                "WITH DISTINCT m.id AS id, m.downloads AS d ORDER BY d DESC LIMIT $n RETURN id, d",
+                {"anchors": anchors[start : start + 200], "n": per_licence},
+            )
+            best.update({r["id"]: int(r["d"] or 0) for r in found})
+        chosen.update(sorted(best, key=lambda i: (-best[i], i))[:per_licence])
     ids = sorted(chosen)
     ancestors = rows(
         conn,
-        f"UNWIND $ids AS id MATCH (m:Model {{id: id}})-[:DERIVED_FROM*1..{MAX_DEPTH}]->(a:Model) RETURN DISTINCT a.id AS id",
+        f"UNWIND $ids AS id MATCH (m:Model {{id: id}}) MATCH p = ANY SHORTEST (m)-[:DERIVED_FROM]->{{1,{MAX_DEPTH}}}(a:Model) "
+        "RETURN DISTINCT a.id AS id",
         {"ids": ids},
     )
     return sorted(chosen | {r["id"] for r in ancestors})

@@ -1,16 +1,25 @@
 cff-version: 1.2.0
-message: "If you use Pedigree or its evaluation, please cite it as below."
+message: "If you use Pedigree or its figures, please cite it as below."
 type: software
-title: "Pedigree: Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it."
+title: "Pedigree: the licence terms an open model inherits"
 abstract: >-
-  {{ABSTRACT}}
+  Pedigree walks an open model's family tree on Hugging Face (fine-tunes, adapters, merges, quantisations) and reports
+  which licence terms it inherits, from which ancestor and under which clause. The lineage of 213,928 models, built
+  from a pinned snapshot of 914,842 Hub model cards, is one Relate by Neo4j file; the checks run in Cypher, in a
+  coding-agent hook before a download, over MCP and in the browser.
 authors:
   - family-names: Donovici
     given-names: Marc
 version: 1.0.0
-date-released: "{{RELEASE_DATE}}"
 license: MIT
 repository-code: "https://github.com/Marc-Dvci/pedigree"
-url: "{{DEMO_URL}}"
+url: "https://marc-dvci.github.io/pedigree/"
 keywords:
-  - "{{KEYWORD}}"
+  - open models
+  - model licences
+  - Hugging Face
+  - lineage
+  - Relate
+  - Neo4j
+  - Cypher
+  - MCP

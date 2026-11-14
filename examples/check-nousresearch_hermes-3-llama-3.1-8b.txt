@@ -1,0 +1,10 @@
+NousResearch/Hermes-3-Llama-3.1-8B: declares llama3
+  Inherits llama3.1 from meta-llama/Llama-3.1-8B
+    path: NousResearch/Hermes-3-Llama-3.1-8B -> meta-llama/Llama-3.1-8B
+    attribution: clause 1.b.i(B): prominently display "Built with Llama" on a related website, user interface, blogpost, about page, or product documentation
+    naming: clause 1.b.i: include "Llama" at the beginning of any such AI model name
+    notice: clause 1.b.i(A), 1.b.iii: provide a copy of this Agreement with any such Llama Materials
+    use_policy: clause 1.b.iv: adhere to the Acceptable Use Policy for the Llama Materials
+    user_threshold: clause 2: greater than 700 million monthly active users ... you must request a license from Meta
+  Declared terms differ from upstream terms: attribution, naming, notice, use_policy, user_threshold
+  Name: llama3.1 clause 1.b.i asks derivative models to begin with 'Llama'

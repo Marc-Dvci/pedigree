@@ -83,6 +83,32 @@ from which ancestor, by which path, under which clause?**
 (:Snapshot {dataset, revision, rows})
 ```
 
+## How it works
+
+![Public sources (Hub model cards, the Hub API for gated family models, licence texts) are built into one Relate file; fixed rules in Cypher decide; answers land in the CLI, the MCP server, the pre-download hook and the browser page](docs/architecture.png)
+
+1. **Lineage.** The Hub tags every model whose card names a base model: `base_model:finetune:<id>`, `adapter`, `merge`
+   and `quantized`. [`lineage.py`](pedigree/lineage.py) reads those tags from the 914,842 cards of the pinned snapshot,
+   resolves ids written with other casing, drops the 1,235 cards that name the model as its own base, and keeps every
+   model below the five families' own releases. The snapshot leaves out gated repositories, so the families' 775 gated
+   models come from the Hub API.
+2. **Licences.** `license:<id>` gives the declared licence; for `license:other`, the family models' cards give the
+   name (`qwen-research`, `mrl`, `deepseek`...). Each licence links to the obligations it passes to derivatives,
+   quoted from its text ([`sources/obligations.csv`](sources/obligations.csv)).
+3. **One file.** [`build.py`](pedigree/build.py) writes the graph with Relate's Python binding, and `relate clone`
+   compacts it into `pedigree.rl`, 16.5 MB.
+4. **Checks.** A model's inherited terms are one Cypher statement: `ANY SHORTEST` paths up `DERIVED_FROM` to each
+   ancestor, then the ancestor's licence and its obligations, keeping the nearest ancestor for each. Over 24 checks, the
+   median took 0.5 milliseconds and the slowest 2.6. Shortest paths matter here: one dense family of merges has 426 descendants and far more paths.
+
+```cypher
+// Every obligation a model inherits, from its nearest ancestor (pedigree/checks.py)
+MATCH p = ANY SHORTEST (m:Model {id: $id})-[:DERIVED_FROM]->{1,30}(a:Model)
+MATCH (a)-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)
+WITH l, o, a, [n IN nodes(p) | n.id] AS chain ORDER BY size(chain), a.id
+RETURN l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, clause: o.clause, text: o.text})[0] AS nearest
+```
+
 ## Agents
 
 | Piece | What the agent gets |

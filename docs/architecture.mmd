@@ -1,6 +1,18 @@
 %% Source of docs/architecture.png, the diagram in the README. Rebuild: python scripts/render_diagram.py
-%% TEMPLATE: replace with the project's own flow; mark where models read and where code decides.
-flowchart TD
-    A["Input<br/>what the user gives"] --> B["Model step<br/>reads, locates, phrases"]
-    B --> C{{"Decision<br/>fixed rules, app/core.py"}}
-    C --> D["Output<br/>with the evidence it rests on"]
+flowchart TB
+    subgraph IN["Public sources"]
+        direction TB
+        A["Hub model cards<br/>914,842, snapshot be6e076"]
+        B["Hub API<br/>775 gated family models"]
+        C["Licence texts<br/>41 obligations, 14 licences"]
+        A ~~~ B ~~~ C
+    end
+    V[("Relate by Neo4j<br/>pedigree.rl : one file<br/>213,928 models, 220,768<br/>lineage edges")]
+    K["Fixed rules, in Cypher on Relate<br/>inherited terms · nearest ancestor and path<br/>declared terms that differ · naming clause<br/>population figures"]
+    O1["CLI"]
+    O2["MCP server<br/>and skill"]
+    O3["Pre-download<br/>agent hook"]
+    O4["Browser page<br/>WebAssembly"]
+    IN -->|build, then relate clone| V
+    V --> K
+    K --> O1 & O2 & O3 & O4

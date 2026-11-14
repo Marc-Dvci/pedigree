@@ -1,0 +1,10 @@
+jinaai/jina-embeddings-v5-text-small-retrieval: declares cc-by-nc-4.0
+  Inherits apache-2.0 from Qwen/Qwen3-0.6B-Base
+    path: jinaai/jina-embeddings-v5-text-small-retrieval -> jinaai/jina-embeddings-v5-text-small -> Qwen/Qwen3-0.6B-Base
+    notice: clause 4(a), 4(d): give any other recipients of the Work or Derivative Works a copy of this License
+  Inherits cc-by-nc-4.0 from jinaai/jina-embeddings-v5-text-small
+    path: jinaai/jina-embeddings-v5-text-small-retrieval -> jinaai/jina-embeddings-v5-text-small
+    attribution: clause 3(a)(1): identification of the creator(s) of the Licensed Material
+    non_commercial: clause 2(a)(1): produce, reproduce, and Share Adapted Material for NonCommercial purposes only
+  Declared terms differ from upstream terms: notice
+  Non-commercial terms upstream: cc-by-nc-4.0

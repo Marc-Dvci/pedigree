@@ -1,0 +1,8 @@
+Comfy-Org/Qwen-Image-2.1: declares other
+  Inherits qwen-research from Qwen/Qwen-Image-2.1
+    path: Comfy-Org/Qwen-Image-2.1 -> Qwen/Qwen-Image-2.1
+    attribution: clause 4.b: prominently display "Built with Qwen" or "Improved using Qwen" in the related product documentation
+    non_commercial: clause 1.i, 2.a: FOR NON-COMMERCIAL PURPOSES ONLY
+    notice: clause 3.a, 3.c: give any other recipients of the Materials or derivative works a copy of this Agreement
+  Declared terms differ from upstream terms: attribution, non_commercial, notice
+  Non-commercial terms upstream: qwen-research

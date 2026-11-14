@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1640 1000" width="1640" height="1000">
+  <!-- Pedigree: how it works, drawn as a stud-book chart. Public sources join in brackets into one Relate file, fixed
+       Cypher rules decide, and the answers branch out to four surfaces. Rendered to architecture.png by
+       scripts/render_diagram.py. -->
+  <rect width="1640" height="1000" fill="#ffffff"/>
+  <style>
+    .cap { font: 600 19px "Spectral", Georgia, serif; letter-spacing: 3px; fill: #6b7280; }
+    .author { font: 20px "IBM Plex Mono", monospace; fill: #6b7280; }
+    .name { font: 600 27px "IBM Plex Mono", monospace; fill: #111827; }
+    .big { font: 600 40px "IBM Plex Mono", monospace; fill: #111827; }
+    .note { font: italic 23px "Spectral", Georgia, serif; fill: #4b5563; }
+    .rel { font: italic 21px "Spectral", Georgia, serif; fill: #6b7280; }
+    .rule { stroke: #9ca3af; stroke-width: 2.5; fill: none; }
+    .stamp rect { fill: none; stroke-width: 2.2; }
+    .stamp text { font: 600 17px "IBM Plex Mono", monospace; letter-spacing: 1px; }
+  </style>
+
+  <text x="60" y="80" class="cap">PUBLIC SOURCES</text>
+  <text x="560" y="80" class="cap">ONE FILE</text>
+  <text x="960" y="80" class="cap">THE RULES</text>
+  <text x="1330" y="80" class="cap">THE ANSWERS</text>
+
+  <!-- Sources -->
+  <text x="60" y="200" class="author">librarian-bots</text>
+  <text x="60" y="236" class="name">model_cards_with_metadata</text>
+  <g class="stamp"><rect x="60" y="252" width="372" height="32" rx="4" stroke="#1d4ed8"/><text x="246" y="274" text-anchor="middle" fill="#1d4ed8">914,842 MODEL CARDS · BE6E076</text></g>
+
+  <text x="60" y="440" class="author">huggingface.co</text>
+  <text x="60" y="476" class="name">Hub API</text>
+  <g class="stamp"><rect x="60" y="492" width="282" height="32" rx="4" stroke="#1d4ed8"/><text x="201" y="514" text-anchor="middle" fill="#1d4ed8">775 GATED FAMILY MODELS</text></g>
+
+  <text x="60" y="680" class="author">sources/</text>
+  <text x="60" y="716" class="name">obligations.csv</text>
+  <g class="stamp"><rect x="60" y="732" width="362" height="32" rx="4" stroke="#9d174d"/><text x="241" y="754" text-anchor="middle" fill="#9d174d">41 OBLIGATIONS · 14 LICENCES</text></g>
+  <text x="60" y="800" class="note">each quoted from the licence text</text>
+
+  <!-- Bracket into the file -->
+  <path d="M470,228 H500 M470,468 H500 M470,708 H500 M500,228 V708 M500,468 H556" class="rule"/>
+  <text x="505" y="455" class="rel">build</text>
+
+  <!-- The file -->
+  <text x="560" y="420" class="author">Relate by Neo4j</text>
+  <text x="560" y="470" class="big">pedigree.rl</text>
+  <g class="stamp"><rect x="560" y="492" width="214" height="32" rx="4" stroke="#0f766e"/><text x="667" y="514" text-anchor="middle" fill="#0f766e">213,928 MODELS</text></g>
+  <g class="stamp"><rect x="560" y="536" width="284" height="32" rx="4" stroke="#0f766e"/><text x="702" y="558" text-anchor="middle" fill="#0f766e">220,768 LINEAGE EDGES</text></g>
+  <text x="560" y="606" class="note">one file, compacted by relate clone</text>
+
+  <path d="M880,468 H956" class="rule"/>
+
+  <!-- The rules -->
+  <text x="960" y="420" class="author">Cypher on Relate</text>
+  <text x="960" y="456" class="name">fixed rules</text>
+  <text x="960" y="500" class="note">inherited terms, from the</text>
+  <text x="960" y="530" class="note">nearest ancestor, with the path</text>
+  <text x="960" y="566" class="note">declared terms that differ</text>
+  <text x="960" y="602" class="note">the naming clause</text>
+  <text x="960" y="638" class="note">population figures</text>
+
+  <!-- Bracket out to the answers -->
+  <path d="M1270,468 H1296 M1296,188 V788 M1296,188 H1326 M1296,388 H1326 M1296,588 H1326 M1296,788 H1326" class="rule"/>
+
+  <text x="1330" y="160" class="author">python -m pedigree</text>
+  <text x="1330" y="196" class="name">CLI and CI</text>
+  <text x="1330" y="232" class="note">check a model, rebuild</text>
+
+  <text x="1330" y="360" class="author">MCP</text>
+  <text x="1330" y="396" class="name">MCP server</text>
+  <text x="1330" y="432" class="note">four tools and a skill</text>
+
+  <text x="1330" y="560" class="author">coding agents</text>
+  <text x="1330" y="596" class="name">Pre-download hook</text>
+  <text x="1330" y="632" class="note">nine download forms</text>
+
+  <text x="1330" y="760" class="author">WebAssembly</text>
+  <text x="1330" y="796" class="name">Browser page</text>
+  <text x="1330" y="832" class="note">Relate in the tab</text>
+
+  <text x="820" y="950" text-anchor="middle" class="note" style="font-style: normal; fill: #111827; font-size: 25px;">Plain code decides every finding. Models read and explain, and an agent's terms come from a tool result.</text>
+</svg>

@@ -94,7 +94,7 @@ from which ancestor, by which path, under which clause?**
 
 ## How it works
 
-![Public sources (Hub model cards, the Hub API for gated family models, licence texts) are built into one Relate file; fixed rules in Cypher decide; answers land in the CLI, the MCP server, the pre-download hook and the browser page](docs/architecture.png)
+![Drawn as a stud-book chart: three public sources (the Hub's model-card snapshot, the Hub API for 775 gated family models, and 41 obligations quoted from 14 licence texts) join into one Relate file, pedigree.rl, with 213,928 models; fixed rules in Cypher decide; the answers branch out to the CLI and CI, the MCP server, the pre-download hook and the browser page](docs/architecture.png)
 
 1. **Lineage.** The Hub tags every model whose card names a base model: `base_model:finetune:<id>`, `adapter`, `merge`
    and `quantized`. [`lineage.py`](pedigree/lineage.py) reads those tags from the 914,842 cards of the pinned snapshot,

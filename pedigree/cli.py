@@ -32,7 +32,8 @@ def _connect(store: Path) -> Any:
 
 
 def render(result: dict[str, Any]) -> str:
-    lines = [f"{result['model']}: declares {result['declared'] or 'no licence'}"]
+    declared = "a licence named in its card (Hub id other)" if result.get("declared_unresolved") else result["declared"]
+    lines = [f"{result['model']}: declares {declared or 'no licence'}"]
     if not result["inherited"]:
         lines.append("  No ancestor in the graph declares a licence with obligations.")
         return "\n".join(lines)

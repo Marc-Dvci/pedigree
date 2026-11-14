@@ -64,7 +64,11 @@ export function check(graph, id) {
   if (!found) return null;
   const upstream = graph.rows(graph.queries.inherited, { id });
   const declared = found.licence;
-  const differs = upstream.filter((u) => u.licence !== declared);
+  // `other`: a licence named only in the card, possibly the upstream one; no difference is claimed.
+  const unresolved = declared === "other";
+  // An upstream term differs when the declared licence has no term of the same kind in the same words.
+  const carried = new Set(graph.rows(graph.queries.own, { id }).map((o) => JSON.stringify([o.kind, o.text])));
+  const differs = unresolved ? [] : upstream.filter((u) => !carried.has(JSON.stringify([u.kind, u.nearest.text])));
   const naming = [];
   const own = new Set(found.parents.map((p) => p.relation));
   if (TRAINED.some((r) => own.has(r))) {
@@ -76,6 +80,7 @@ export function check(graph, id) {
   return {
     model: found.id,
     declared,
+    declared_unresolved: unresolved,
     parents: found.parents,
     inherited: upstream,
     differs,
@@ -86,10 +91,12 @@ export function check(graph, id) {
 }
 
 // The ancestors as a tree for the chart: each node lists its parents, to a fixed depth.
-export function tree(graph, id, depth = 4) {
+// A node at the depth limit keeps the count of its own parents in `more`, so the chart can show the line goes on.
+export function tree(graph, id, depth = 3) {
   const node = (mid, level, seen) => {
     const m = model(graph, mid);
-    const out = { id: mid, licence: m ? m.licence : null, downloads: m ? m.downloads : 0, parents: [] };
+    const out = { id: mid, licence: m ? m.licence : null, downloads: m ? m.downloads : 0, parents: [], more: 0 };
+    if (m && level >= depth) out.more = m.parents.length;
     if (!m || level >= depth || seen.has(mid)) return out;
     const next = new Set(seen).add(mid);
     out.parents = m.parents.map((p) => ({ relation: p.relation, node: node(p.parent, level + 1, next) }));

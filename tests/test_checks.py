@@ -160,3 +160,55 @@ def test_a_cypher_literal_is_written_for_every_property_type() -> None:
     ]
     with pytest.raises(TypeError):
         literal({"a": 1})
+
+
+def test_a_licence_named_only_in_the_card_claims_no_difference(tmp_path: Path) -> None:
+    rows_ = [
+        {"modelId": "meta-llama/Llama-3.1-8B", "tags": ["license:llama3.1"]},
+        {"modelId": "fan/own-terms", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B", "license:other"]},
+    ]
+    parsed = parse_rows(rows_)
+    store = tmp_path / "p.rl"
+    build(
+        store,
+        parsed.models,
+        descendants(parsed.models, ["meta-llama/Llama-3.1-8B"]),
+        ROOT / "sources",
+        {"dataset": "t"},
+    )
+    c = relate.connect(str(store), read_only=True)
+    try:
+        result = checks.check(c, "fan/own-terms")
+    finally:
+        c.close()
+    assert result["declared_unresolved"] is True
+    assert result["differs"] == []
+    assert result["upstream_licences"] == ["llama3.1"]  # what it inherits is still reported
+
+
+def test_a_declared_licence_differs_only_where_its_wording_differs(tmp_path: Path) -> None:
+    # Llama 3 asks for "Built with Meta Llama 3" and a "Llama 3" name; Llama 3.1 for "Built with Llama" and a "Llama"
+    # name. Their notice, use-policy and user-threshold clauses read the same.
+    rows_ = [
+        {"modelId": "meta-llama/Llama-3.1-8B", "tags": ["license:llama3.1"]},
+        {"modelId": "fan/Hermes-like", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B", "license:llama3"]},
+    ]
+    parsed = parse_rows(rows_)
+    store = tmp_path / "p.rl"
+    build(
+        store,
+        parsed.models,
+        descendants(parsed.models, ["meta-llama/Llama-3.1-8B"]),
+        ROOT / "sources",
+        {"dataset": "t"},
+    )
+    c = relate.connect(str(store), read_only=True)
+    try:
+        result = checks.check(c, "fan/Hermes-like")
+    finally:
+        c.close()
+    assert {(d["licence"], d["kind"]) for d in result["differs"]} == {
+        ("llama3.1", "attribution"),
+        ("llama3.1", "naming"),
+    }
+    assert {i["kind"] for i in result["inherited"]} >= {"notice", "use_policy", "user_threshold"}

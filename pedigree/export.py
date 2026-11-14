@@ -13,7 +13,7 @@ from typing import Any
 
 import relate
 
-from pedigree.checks import INHERITED, MAX_DEPTH, rows
+from pedigree.checks import MAX_DEPTH, query_texts, rows
 
 _NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
@@ -111,7 +111,7 @@ def export(
     out_dir.mkdir(parents=True, exist_ok=True)
     ids = pick(conn, per_licence)
     (out_dir / "slice.cypher").write_text(slice_script(conn, ids), encoding="utf-8")
-    (out_dir / "queries.json").write_text(json.dumps({"inherited": INHERITED}, indent=2) + "\n", encoding="utf-8")
+    (out_dir / "queries.json").write_text(json.dumps(query_texts(), indent=2) + "\n", encoding="utf-8")
     if stats is not None:
         (out_dir / "stats.json").write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     return {"models": len(ids)}

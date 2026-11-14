@@ -6,5 +6,5 @@ NousResearch/Hermes-3-Llama-3.1-8B: declares llama3
     notice: clause 1.b.i(A), 1.b.iii: provide a copy of this Agreement with any such Llama Materials
     use_policy: clause 1.b.iv: adhere to the Acceptable Use Policy for the Llama Materials
     user_threshold: clause 2: greater than 700 million monthly active users ... you must request a license from Meta
-  Declared terms differ from upstream terms: attribution, naming, notice, use_policy, user_threshold
+  Declared terms differ from upstream terms: attribution, naming
   Name: llama3.1 clause 1.b.i asks derivative models to begin with 'Llama'

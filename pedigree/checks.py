@@ -51,13 +51,21 @@ def inherited(conn: relate.Connection, model_id: str) -> list[dict[str, Any]]:
     return rows(conn, INHERITED, {"id": model_id})
 
 
+OWN = """
+MATCH (:Model {id: $id})-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)
+RETURN l.id AS licence, o.kind AS kind, o.text AS text
+ORDER BY kind
+"""
+
+
 def own(conn: relate.Connection, model_id: str) -> list[dict[str, Any]]:
-    return rows(
-        conn,
-        "MATCH (:Model {id: $id})-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation) "
-        "RETURN l.id AS licence, o.kind AS kind ORDER BY kind",
-        {"id": model_id},
-    )
+    """The obligations of the model's own declared licence."""
+    return rows(conn, OWN, {"id": model_id})
+
+
+def query_texts() -> dict[str, str]:
+    """The Cypher the browser page runs, written to web/data/queries.json by the export."""
+    return {"inherited": INHERITED, "own": OWN}
 
 
 def _prefix(text: str) -> str | None:
@@ -77,7 +85,13 @@ def check(conn: relate.Connection, model_id: str) -> dict[str, Any]:
         raise KeyError(model_id)
     upstream = inherited(conn, model_id)
     declared = found["licence"]
-    differs = [u for u in upstream if u["licence"] != declared]
+    # `other` is the Hub's id for a licence named only in the card: it may be the upstream licence itself, so the
+    # declared terms are unresolved and no difference is claimed.
+    unresolved = declared == "other"
+    # An upstream term differs when the declared licence has no term of the same kind in the same words: Llama 3's
+    # "Built with Meta Llama 3" is not Llama 3.1's "Built with Llama", while their notice clauses read the same.
+    carried = {(o["kind"], o["text"]) for o in own(conn, model_id)}
+    differs = [] if unresolved else [u for u in upstream if (u["kind"], u["nearest"]["text"]) not in carried]
     naming = []
     own_relations = {p["relation"] for p in found["parents"]}
     if own_relations & set(TRAINED):
@@ -89,6 +103,7 @@ def check(conn: relate.Connection, model_id: str) -> dict[str, Any]:
     return {
         "model": found["id"],
         "declared": declared,
+        "declared_unresolved": unresolved,
         "parents": found["parents"],
         "inherited": upstream,
         "differs": differs,

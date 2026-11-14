@@ -23,6 +23,8 @@ MODELS = [
     "jinaai/jina-embeddings-v5-text-small-retrieval",
     "Comfy-Org/Qwen-Image-2.1",
     "Comfy-Org/ltx-2",
+    "zerofata/L3.3-GeneticLemonade-Final-v2-70B",
+    "mradermacher/Cthulhu-70B-v1-i1-GGUF",
     "casperhansen/llama-3.3-70b-instruct-awq",
     "meta-llama/Llama-3.1-8B-Instruct",
 ]

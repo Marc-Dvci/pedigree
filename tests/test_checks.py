@@ -86,3 +86,31 @@ def test_a_root_inherits_nothing(conn: relate.Connection) -> None:
 def test_an_unknown_model_is_refused(conn: relate.Connection) -> None:
     with pytest.raises(KeyError):
         checks.check(conn, "nobody/nothing")
+
+
+def test_inheritors_count_every_model_below_a_licence(conn: relate.Connection) -> None:
+    from pedigree import stats
+
+    # Under llama3.1: the instruct model, two fine-tunes, the quantisation and the merge.
+    assert stats.inheritors(conn, "llama3.1") == 5
+
+
+def test_the_declared_breakdown_counts_what_inheritors_declare(conn: relate.Connection) -> None:
+    from pedigree import stats
+
+    got = {r["declared"]: r["models"] for r in stats.declared_breakdown(conn, "llama3.1")}
+    assert got == {"llama3.1": 2, "apache-2.0": 1, "none": 2}
+
+
+def test_naming_counts_trained_models_and_those_with_the_prefix(conn: relate.Connection) -> None:
+    from pedigree import stats
+
+    # Trained under llama3.1: Llama-3.1-8B-Instruct, Hermes-ft, Llama-3.1-Hermes and the merge.
+    assert stats.naming(conn, "llama3.1", "Llama") == {"trained": 4, "prefixed": 2}
+
+
+def test_the_family_owners_own_models_can_be_left_out(conn: relate.Connection) -> None:
+    from pedigree import stats
+
+    assert stats.inheritors(conn, "llama3.1", exclude=["meta-llama"]) == 4
+    assert stats.naming(conn, "llama3.1", "Llama", exclude=["meta-llama"]) == {"trained": 3, "prefixed": 1}

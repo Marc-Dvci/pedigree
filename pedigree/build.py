@@ -20,16 +20,16 @@ from pedigree.lineage import Model
 
 BATCH = 5_000
 
-# `license:other` hides the real licence: the card's license_name says which one. These names map to the clause table.
+# `license:other` hides the real licence: the card's license_name says which one. These names map to licences whose
+# texts are in the clause table (sources/obligations.csv).
 OTHER_NAMES = {
     "qwen": "qwen",
-    "tongyi-qianwen": "qwen",
     "qwen-research": "qwen-research",
     "mrl": "mrl",
-    "mistral-ai-research-licence": "mrl",
     "mnpl": "mnpl",
     "deepseek": "deepseek",
     "deepseek-license": "deepseek",
+    "gemma-terms-of-use": "gemma",
 }
 
 
@@ -47,7 +47,8 @@ def licence_of(model: Model, other_names: Mapping[str, str]) -> str | None:
     """The clause-table id of the licence a model declares, `other` resolved through its license_name."""
     if model.licence == "other":
         name = other_names.get(model.id, "").strip().lower()
-        return OTHER_NAMES.get(name, "other")
+        # A name the clause table covers maps to it; any other name stays as itself, with no obligations attached.
+        return OTHER_NAMES.get(name, name or "other")
     return model.licence
 
 

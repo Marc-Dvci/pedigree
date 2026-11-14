@@ -53,10 +53,10 @@ function stamp(x, y, lic) {
 
 function drawChart(root, differs) {
   const { nodes, leaves } = layout(root);
-  const colW = 380;
+  const colW = 300;
   const rowH = 78;
   const maxDepth = Math.max(...nodes.map((n) => n.depth));
-  const width = 30 + maxDepth * colW + 330;
+  const width = 30 + maxDepth * colW + 300;
   const height = 40 + leaves * rowH;
   const X = (d) => 16 + d * colW;
   const Y = (y) => 40 + y * rowH;
@@ -66,8 +66,8 @@ function drawChart(root, differs) {
     const y = Y(item.y);
     if (item.kids.length) {
       const ys = item.kids.map((k) => Y(k.y));
-      const bx = x + 300;
-      parts.push(`<line x1="${x + 268}" y1="${y}" x2="${bx}" y2="${y}" class="rule"/>`);
+      const bx = x + 234;
+      parts.push(`<line x1="${x + 222}" y1="${y}" x2="${bx}" y2="${y}" class="rule"/>`);
       parts.push(`<line x1="${bx}" y1="${Math.min(y, ...ys)}" x2="${bx}" y2="${Math.max(y, ...ys)}" class="rule"/>`);
       for (const k of item.kids) {
         const kx = X(k.depth);
@@ -77,16 +77,21 @@ function drawChart(root, differs) {
     }
     const [author, name] = item.n.id.includes("/") ? item.n.id.split("/", 2) : ["", item.n.id];
     const isRoot = item.depth === 0;
-    const shown = name.length > 31 ? name.slice(0, 30) + "…" : name;
+    const shown = name.length > 26 ? name.slice(0, 25) + "…" : name;
     parts.push(`<text x="${x}" y="${y - 18}" class="author">${esc(author)}</text>`);
     parts.push(`<text x="${x}" y="${y}" class="name${isRoot ? " root" : ""}"><title>${esc(item.n.id)}</title>${esc(shown)}</text>`);
     parts.push(stamp(x, y + 8, item.n.licence));
     if (isRoot && differs) parts.push(`<text x="${x}" y="${y + 46}" class="differs">declared terms differ from upstream terms</text>`);
+    if (item.n.more) {
+      parts.push(`<line x1="${x + 222}" y1="${y}" x2="${x + 240}" y2="${y}" class="rule"/>`);
+      parts.push(`<text x="${x + 244}" y="${y + 4}" class="more">+${item.n.more}</text>`);
+    }
   }
   const svg = $("#chart");
   svg.setAttribute("viewBox", `0 0 ${width} ${height + 24}`);
   svg.setAttribute("width", String(width));
   svg.setAttribute("height", String(height + 24));
+  svg.style.aspectRatio = `${width} / ${height + 24}`;
   svg.innerHTML = parts.join("");
 }
 
@@ -101,12 +106,14 @@ function drawTerms(r) {
     const rows = items
       .map((i) => {
         const fail = r.naming.find((n) => n.licence === lic && i.kind === "naming");
+        const differ = r.differs.some((d) => d.licence === lic && d.kind === i.kind);
+        const note = fail ? `the name does not begin with “${esc(fail.prefix)}”` : differ ? "the declared licence words this differently, or not at all" : "";
         return `<li><span class="kind">${esc(KIND[i.kind] || i.kind)}</span> <span class="clause">§${esc(i.nearest.clause)}</span>
-          <q>${esc(i.nearest.text)}</q>${fail ? ` <span class="flag">the name does not begin with “${esc(fail.prefix)}”</span>` : ""}</li>`;
+          <q>${esc(i.nearest.text)}</q>${note ? ` <span class="flag">${note}</span>` : ""}</li>`;
       })
       .join("");
     return `<section class="licence">
-      <h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)} <span class="from">from ${esc(near.ancestor)}${same ? "" : ' · <span class="flag">not in the declared licence</span>'}</span></h3>
+      <h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)} <span class="from">from ${esc(near.ancestor)}${same ? "" : ' · <span class="flag">not the declared licence</span>'}</span></h3>
       <p class="path">${near.chain.map(esc).join(" → ")}</p>
       <ul>${rows}</ul>
       <p class="src"><a href="${esc(near.source)}">Licence text</a></p></section>`;
@@ -130,7 +137,7 @@ function show(id) {
   const differs = r.differs.length > 0;
   const kinds = [...new Set(r.differs.map((d) => KIND[d.kind] || d.kind))];
   $("#verdict").innerHTML = `<h2>${esc(r.model)}</h2>
-    <p>Declares <b>${esc(r.declared || "no licence tag")}</b>. Inherits terms from ${r.upstream_licences.length ? r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ") : "no licence with obligations"}.
+    <p>Declares <b>${esc(r.declared_unresolved ? "a licence named in its card (Hub id other)" : r.declared || "no licence tag")}</b>. Inherits terms from ${r.upstream_licences.length ? r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ") : "no licence with obligations"}.
     ${differs ? `<span class="flag">Upstream terms the declared licence does not carry: ${kinds.map(esc).join(", ")}.</span>` : ""}</p>`;
   drawChart(tree(state.graph, r.model), differs);
   drawTerms(r);

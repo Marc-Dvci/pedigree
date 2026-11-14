@@ -39,7 +39,8 @@ form button[type="submit"]:focus-visible, .chips button:focus-visible { outline:
 #verdict h2 { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 1.25rem; }
 .flag { color: var(--red); }
 .chart-wrap { overflow-x: auto; margin: 10px 0 0; padding-bottom: 6px; }
-#chart { display: block; max-width: none; }
+#chart { display: block; max-width: 100%; height: auto; }
+#chart .more { font: 12px "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); }
 #chart .rule { stroke: var(--rule); stroke-width: 1.5; }
 #chart .author { font: 12px "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); }
 #chart .name { font: 600 14px "IBM Plex Mono", ui-monospace, monospace; fill: var(--ink); }

@@ -107,8 +107,10 @@ from which ancestor, by which path, under which clause?**
 3. **One file.** [`build.py`](pedigree/build.py) writes the graph with Relate's Python binding, and `relate clone`
    compacts it into `pedigree.rl`, 16.5 MB.
 4. **Checks.** A model's inherited terms are one Cypher statement: `ANY SHORTEST` paths up `DERIVED_FROM` to each
-   ancestor, then the ancestor's licence and its obligations, keeping the nearest ancestor for each. Over 24 checks, the
-   median took 0.5 milliseconds and the slowest 2.6. Shortest paths matter here: one dense family of merges has 426 descendants and far more paths.
+   ancestor, then the ancestor's licence and its obligations, keeping the nearest ancestor for each. A full check of
+   one model took 0.6 milliseconds at the median over 24 models, and 2.1 at the slowest
+   ([`evidence/timings.json`](evidence/timings.json), `python experiments/timings.py`). Shortest paths matter here: one
+   dense family of merges has 426 descendants and far more paths.
 
 ```cypher
 // Every obligation a model inherits, from its nearest ancestor (pedigree/checks.py)
@@ -145,7 +147,7 @@ licence written out in full counts as its id when grading (`mistral-research-lic
 ## Results
 
 Figures on the pinned snapshot, for third-party models (the five families' own releases are left out). They are in
-[`evidence/stats.json`](evidence/stats.json), computed in Cypher by [`stats.py`](pedigree/stats.py) in 2.3 seconds.
+[`evidence/stats.json`](evidence/stats.json), computed in Cypher by [`stats.py`](pedigree/stats.py) in 3.1 seconds.
 
 | Licence | Models that inherit its terms | Declare the same licence | Declare another | Declare none |
 |---|---|---|---|---|

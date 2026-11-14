@@ -1,0 +1,32 @@
+{
+  "models": 24,
+  "repeats": 5,
+  "median_ms": 0.6,
+  "slowest_ms": 2.09,
+  "per_model_ms": {
+    "mradermacher/Cthulhu-70B-v1-i1-GGUF": 2.09,
+    "mradermacher/L3.1-MS-Astoria-70b-v2-heretic-i1-GGUF": 0.9,
+    "TheBloke/deepseek-coder-6.7B-instruct-GGUF": 0.48,
+    "TheBloke/deepseek-coder-33B-instruct-GGUF": 0.59,
+    "Comfy-Org/ltx-2": 0.54,
+    "ggml-org/embeddinggemma-300M-GGUF": 0.5,
+    "MaziyarPanahi/Meta-Llama-3-8B-Instruct-GGUF": 0.62,
+    "lmstudio-community/Hermes-4-70B-MLX-4bit": 0.88,
+    "casperhansen/llama-3.3-70b-instruct-awq": 0.67,
+    "zerofata/L3.3-GeneticLemonade-Final-v2-70B": 1.17,
+    "hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF": 0.63,
+    "MaziyarPanahi/Llama-3.2-1B-Instruct-GGUF": 0.61,
+    "MaziyarPanahi/Llama-3.3-70B-Instruct-GGUF": 0.76,
+    "lmstudio-community/Codestral-22B-v0.1-GGUF": 0.47,
+    "bartowski/Codestral-22B-v0.1-GGUF": 0.46,
+    "darkc0de/XORTRON.CriminalComputing.LARGE.2026.3": 0.53,
+    "MaziyarPanahi/Mistral-Small-Instruct-2409-GGUF": 0.53,
+    "huihui-ai/Qwen2.5-72B-Instruct-abliterated": 0.56,
+    "bartowski/Qwen2.5-72B-Instruct-GGUF": 0.53,
+    "Comfy-Org/Qwen-Image-2.1": 0.6,
+    "mudler/locate-anything.cpp-gguf": 0.57,
+    "NousResearch/Hermes-3-Llama-3.1-8B": 0.6,
+    "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic": 0.7,
+    "jinaai/jina-embeddings-v5-text-small-retrieval": 0.67
+  }
+}

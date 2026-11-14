@@ -110,9 +110,11 @@ def cmd_hook(a: argparse.Namespace) -> int:
 def cmd_build(a: argparse.Namespace) -> int:
     from pedigree.build import build
     from pedigree.lineage import descendants, family_roots, parse_rows
-    from pedigree.snapshot import DATASET, read_rows
+    from pedigree.snapshot import DATASET, read_cache, read_rows, save_cache
 
-    rows = list(read_rows(a.revision))
+    if a.cache and not a.cache.exists():
+        save_cache(a.revision, str(a.cache))
+    rows = list(read_cache(str(a.cache)) if a.cache else read_rows(a.revision))
     parsed = parse_rows(rows)
     roots = family_roots(parsed.models, a.family)
     keep = descendants(parsed.models, roots)
@@ -160,6 +162,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--out", type=Path, default=DEFAULT_STORE)
     s.add_argument("--family", action="append", default=None, help="an owner whose models are family roots")
     s.add_argument("--other-names", type=Path, default=ROOT / "sources" / "other-licence-names.json")
+    s.add_argument("--cache", type=Path, help="a local Parquet copy of the snapshot's lineage columns (made if missing)")
     s.set_defaults(handler=cmd_build)
     s = sub.add_parser("mcp", help="serve the checks over MCP (stdio)")
     s.add_argument("--store", type=Path, default=DEFAULT_STORE)

@@ -6,22 +6,51 @@
     <title>Pedigree</title>
     <meta name="description" content="Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it." />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <!-- The card a pasted link shows (Devpost, Discord, LinkedIn): og:image must be an absolute URL. -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Pedigree" />
     <meta property="og:description" content="Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it." />
     <meta property="og:image" content="{{DEMO_URL}}og-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,800;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main>
+    <header>
+      <p class="register">Register of open models</p>
       <h1>Pedigree</h1>
-      <p class="lede">Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it.</p>
-      <button id="run" type="button">Run the example</button>
-      <pre id="out" aria-live="polite"></pre>
-      <p class="foot" id="status"></p>
+      <p class="tagline">The licence terms an open model inherits from the models it was built on, with the clause, before you or your coding agent download it.</p>
+    </header>
+    <main>
+      <form id="form" role="search">
+        <label for="model">Hugging Face model</label>
+        <div class="row">
+          <input id="model" list="models" autocomplete="off" spellcheck="false" placeholder="author/model" />
+          <datalist id="models"></datalist>
+          <button type="submit">Trace</button>
+        </div>
+        <div id="examples" class="chips"></div>
+      </form>
+
+      <section id="verdict" aria-live="polite"></section>
+      <div class="chart-wrap"><svg id="chart" role="img" aria-label="The model's pedigree: the model on the left, its ancestors to the right, each with its declared licence"></svg></div>
+
+      <section aria-labelledby="terms-title">
+        <h2 id="terms-title" class="caps">Inherited terms</h2>
+        <div id="terms"></div>
+      </section>
+
+      <section aria-labelledby="stats-title">
+        <h2 id="stats-title" class="caps">Across the register</h2>
+        <p class="small">Third-party models only: the families' own releases are left out. Colour: the inherited licence declared again; red, another licence; grey, none.</p>
+        <div id="stats"></div>
+      </section>
     </main>
-    <script src="app.js"></script>
+    <footer>
+      <p id="status">Loading Relate in this tab…</p>
+      <p><a href="https://github.com/Marc-Dvci/pedigree">Source on GitHub</a> · Lineage from the Hugging Face Hub's own base-model tags.</p>
+    </footer>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>

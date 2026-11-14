@@ -1,54 +1,69 @@
-/* TEMPLATE: neutral placeholder; the project's visual identity replaces it (confirmed with Marc first). */
+/* Pedigree: a stud-book identity. White ground, a serif register face, thin black rules, each licence a small
+   registry stamp in its own ink; red only where declared terms differ from upstream terms. */
 :root {
-  --ink: #1f2328;
-  --muted: #57606a;
-  --accent: #0a7d6e;
-  --ground: #ffffff;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+  --ink: #16181b;
+  --muted: #5f6670;
+  --rule: #16181b;
+  --hair: #d9dce0;
+  --red: #b91c1c;
+  --paper: #ffffff;
+  font-family: "Spectral", Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.55;
   color: var(--ink);
-  background: var(--ground);
+  background: var(--paper);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #e6edf3;
-    --muted: #8b949e;
-    --ground: #0d1117;
-  }
-}
-
-main {
-  max-width: 44rem;
-  margin: 12vh auto;
-  padding: 0 1.5rem;
-}
-
-h1 {
-  font-size: 2.6rem;
-  margin: 0 0 0.5rem;
-}
-
-.lede {
-  font-size: 1.2rem;
-  color: var(--muted);
-}
-
-button {
-  font: inherit;
-  padding: 0.6rem 1.2rem;
-  border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-  cursor: pointer;
-}
-
-pre {
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-}
-
-.foot {
-  color: var(--muted);
-  font-size: 0.85rem;
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); }
+header, main, footer { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+header { padding-top: 44px; padding-bottom: 6px; border-bottom: 3px double var(--rule); }
+.register { font-variant: small-caps; letter-spacing: 0.12em; color: var(--muted); margin: 0; }
+h1 { font-size: 3rem; font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+.tagline { font-size: 1.2rem; font-style: italic; max-width: 50rem; margin: 6px 0 18px; }
+h2 { font-weight: 800; font-size: 1.6rem; margin: 0 0 8px; }
+.caps { font-variant: small-caps; letter-spacing: 0.08em; font-size: 1.35rem; border-bottom: 1px solid var(--rule); padding-bottom: 4px; margin-top: 40px; }
+h3 { font-size: 1.1rem; margin: 18px 0 4px; }
+form { margin: 28px 0 10px; }
+label { font-variant: small-caps; letter-spacing: 0.08em; color: var(--muted); }
+.row { display: flex; gap: 10px; margin-top: 4px; }
+input { flex: 1; font: 600 1rem "IBM Plex Mono", ui-monospace, monospace; color: var(--ink); background: var(--paper); border: 0; border-bottom: 2px solid var(--rule); padding: 8px 2px; }
+input:focus { outline: none; border-bottom-color: #1d4ed8; }
+button { font: inherit; cursor: pointer; }
+form button[type="submit"] { font-weight: 600; color: var(--paper); background: var(--ink); border: 0; padding: 8px 22px; }
+form button[type="submit"]:focus-visible, .chips button:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chips button { font: 0.82rem "IBM Plex Mono", ui-monospace, monospace; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); padding: 3px 10px; }
+.chips button:hover { background: #f4f5f6; }
+#verdict { margin-top: 26px; }
+#verdict h2 { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 1.25rem; }
+.flag { color: var(--red); }
+.chart-wrap { overflow-x: auto; margin: 10px 0 0; padding-bottom: 6px; }
+#chart { display: block; max-width: none; }
+#chart .rule { stroke: var(--rule); stroke-width: 1.5; }
+#chart .author { font: 12px "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); }
+#chart .name { font: 600 14px "IBM Plex Mono", ui-monospace, monospace; fill: var(--ink); }
+#chart .name.root { font-size: 14.5px; }
+#chart .rel { font: italic 13px "Spectral", Georgia, serif; fill: var(--muted); }
+#chart .stamp text { font: 600 11px "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.06em; }
+#chart .differs { font: italic 13px "Spectral", Georgia, serif; fill: var(--red); }
+.licence { border-top: 1px solid var(--hair); padding: 6px 0 4px; }
+.licence ul { list-style: none; padding: 0; margin: 6px 0; }
+.licence li { margin: 6px 0; }
+.kind { font-variant: small-caps; letter-spacing: 0.06em; font-weight: 600; }
+.clause { font: 0.85rem "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); }
+q { font-style: italic; }
+.from { font-weight: 400; color: var(--muted); font-size: 0.95rem; }
+.path { font: 0.82rem "IBM Plex Mono", ui-monospace, monospace; color: var(--muted); margin: 0; }
+.src { font-size: 0.9rem; margin: 2px 0 8px; }
+a { color: #1d4ed8; }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.pop { margin: 14px 0 18px; }
+.bar { display: flex; height: 14px; border: 1px solid var(--rule); max-width: 760px; }
+.bar span { display: block; height: 100%; }
+.small { font-size: 0.92rem; color: var(--muted); margin: 4px 0; }
+footer { margin-top: 40px; padding: 22px 28px 46px; border-top: 3px double var(--rule); color: var(--muted); font-size: 0.9rem; }
+@media (max-width: 640px) {
+  header, main, footer { padding-left: 16px; padding-right: 16px; }
+  h1 { font-size: 2.3rem; }
 }

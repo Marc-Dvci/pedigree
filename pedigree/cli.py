@@ -138,6 +138,7 @@ def cmd_build(a: argparse.Namespace) -> int:
             "dataset": DATASET,
             "revision": a.revision,
             "rows": len(rows),
+            "owner_rows_added": len(added),
             "families": a.family,
             "roots": len(roots),
             "self_loops": parsed.self_loops,

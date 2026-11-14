@@ -3316,4 +3316,4 @@ MATCH (c:Model {id: "zeromodels/qwen2-vl-72b-instruct"}), (p:Model {id: "Qwen/Qw
 MATCH (c:Model {id: "zetasepic/Qwen2.5-72B-Instruct-abliterated-GGUF"}), (p:Model {id: "Qwen/Qwen2.5-72B-Instruct"}) CREATE (c)-[:DERIVED_FROM {relation: "quantized"}]->(p);
 MATCH (c:Model {id: "zjiayu064/DeepSeek-V2-Lite-BitsMoE-2bit"}), (p:Model {id: "deepseek-ai/DeepSeek-V2-Lite"}) CREATE (c)-[:DERIVED_FROM {relation: "quantized"}]->(p);
 MATCH (m:Model), (l:Licence) WHERE m.licence = l.id CREATE (m)-[:DECLARES]->(l);
-CREATE (:Snapshot {built: "2026-11-14", dataset: "librarian-bots/model_cards_with_metadata", families: ["meta-llama", "google", "Qwen", "mistralai", "deepseek-ai"], revision: "be6e07669ad32d67b5b0859cf45dd16493fed4b3", roots: 1866, rows: 914842, self_loops: 1235});
+CREATE (:Snapshot {built: "2026-11-14", dataset: "librarian-bots/model_cards_with_metadata", families: ["meta-llama", "google", "Qwen", "mistralai", "deepseek-ai"], owner_rows_added: 775, revision: "be6e07669ad32d67b5b0859cf45dd16493fed4b3", roots: 1866, rows: 914842, self_loops: 1235});

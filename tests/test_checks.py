@@ -121,3 +121,42 @@ def test_the_family_owners_own_models_can_be_left_out(conn: relate.Connection) -
 
     assert stats.inheritors(conn, "llama3.1", exclude=["meta-llama"]) == 4
     assert stats.naming(conn, "llama3.1", "Llama", exclude=["meta-llama"]) == {"trained": 3, "prefixed": 1}
+
+
+def test_the_summary_covers_every_licence_with_obligations_beyond_a_notice(conn: relate.Connection) -> None:
+    from pedigree import stats
+
+    s = stats.summary(conn, exclude=["meta-llama"])
+    assert s["licences"]["llama3.1"]["inheritors"] == 4
+    assert s["licences"]["llama3.1"]["naming"] == {"prefix": "Llama", "trained": 3, "prefixed": 1}
+    assert s["licences"]["qwen-research"]["inheritors"] == 2  # the research fine-tune and the merge
+    assert "apache-2.0" not in s["licences"]
+
+
+def test_the_page_slice_gives_the_same_pedigree_as_the_full_graph(conn: relate.Connection, tmp_path: Path) -> None:
+    from pedigree.export import export
+
+    counts = export(conn, tmp_path, per_licence=10, stats={"licences": {}})
+    assert counts["models"] >= 5
+    copy = relate.connect(":memory:")
+    for statement in (tmp_path / "slice.cypher").read_text(encoding="utf-8").split(";\n"):
+        if statement.strip():
+            copy.execute(statement)
+    for model_id in ["fan/Hermes-ft", "lab/merged", "quant/Hermes-ft-GGUF"]:
+        assert checks.check(copy, model_id)["inherited"] == checks.check(conn, model_id)["inherited"]
+    assert (tmp_path / "queries.json").exists() and (tmp_path / "stats.json").exists()
+
+
+def test_a_cypher_literal_is_written_for_every_property_type() -> None:
+    from pedigree.export import literal
+
+    assert [literal(v) for v in (None, True, 3, 1.5, 'a "b"', ["x", 2])] == [
+        "null",
+        "true",
+        "3",
+        "1.5",
+        '"a \\"b\\""',
+        '["x", 2]',
+    ]
+    with pytest.raises(TypeError):
+        literal({"a": 1})

@@ -802,10 +802,11 @@
       "mistralai",
       "deepseek-ai"
     ],
+    "owner_rows_added": 775,
     "revision": "be6e07669ad32d67b5b0859cf45dd16493fed4b3",
     "roots": 1866,
     "rows": 914842,
     "self_loops": 1235
   },
-  "seconds": 2.29
+  "seconds": 3.06
 }

@@ -45,3 +45,12 @@ def test_a_command_without_a_download_finds_nothing() -> None:
 def test_ids_come_back_once_in_order_of_mention() -> None:
     text = 'from_pretrained("b/two")\nfrom_pretrained("a/one")\nfrom_pretrained("b/two")'
     assert model_ids(text) == ["b/two", "a/one"]
+
+
+def test_an_id_held_in_a_constant_that_a_loader_is_given_is_found() -> None:
+    code = 'MODEL_ID = "NousResearch/Hermes-3-Llama-3.1-8B"\nmodel = AutoModelForCausalLM.from_pretrained(MODEL_ID)\n'
+    assert model_ids(code) == ["NousResearch/Hermes-3-Llama-3.1-8B"]
+
+
+def test_a_quoted_id_without_a_loader_call_is_not_a_download() -> None:
+    assert model_ids('README = "see NousResearch/Hermes-3-Llama-3.1-8B for details"') == []

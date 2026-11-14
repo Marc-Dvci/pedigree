@@ -227,7 +227,7 @@ an axe-core scan with no serious accessibility violation.
 | A fine-tune inherits every obligation of its ancestors' licences, from the nearest ancestor, with the path | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
 | A declared licence differs only where its wording differs (Llama 3 under Llama 3.1: attribution and naming) | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
 | A merge inherits from both parents; a quantisation inherits but is not a newly trained model | [`checks.py`](pedigree/checks.py) | [`test_checks.py`](tests/test_checks.py) |
-| The hook finds model ids in nine download forms | [`detect.py`](pedigree/detect.py) | [`test_detect.py`](tests/test_detect.py) |
+| The hook finds model ids in nine download forms, and an id held in a constant that a loader is given | [`detect.py`](pedigree/detect.py) | [`test_detect.py`](tests/test_detect.py) |
 | Lineage handles renamed ids, case, self-loops and merges | [`lineage.py`](pedigree/lineage.py) | [`test_lineage.py`](tests/test_lineage.py) |
 | The browser page gives the command line's answers | [`web/js/pedigree.js`](web/js/pedigree.js) | [`parity.mjs`](web/test/parity.mjs), [`test_web_parity.py`](tests/test_web_parity.py) |
 | Every part of the page answers in a real browser, with no serious accessibility violation | [`web/js/app.js`](web/js/app.js) | [`test_page.py`](tests/test_page.py) |

@@ -2,7 +2,9 @@
 
 Used by the coding-agent hook: before a Bash command runs, or code lands in a file, every model id it names is checked.
 Covers `from_pretrained`, `pipeline(model=...)`, `snapshot_download`, `hf_hub_download`, `hf download`,
-`huggingface-cli download`, `vllm serve`, `ollama run hf.co/...` and `llama.cpp -hf`.
+`huggingface-cli download`, `vllm serve`, `ollama run hf.co/...` and `llama.cpp -hf`. When code calls one of the
+loaders, every quoted `author/name` string in it counts too, so `MODEL_ID = "..."` then `from_pretrained(MODEL_ID)` is
+found; the hook skips ids that are not models in the graph.
 """
 
 from __future__ import annotations
@@ -22,6 +24,8 @@ _PATTERNS = [
     rf"""huggingface\.co/({_ID})""",
 ]
 _COMPILED = [re.compile(p) for p in _PATTERNS]
+_LOADER = re.compile(r"\b(?:from_pretrained|pipeline|snapshot_download|hf_hub_download)\s*\(")
+_QUOTED = re.compile(rf"""["']({_ID})["']""")
 _NOT_MODELS = {"datasets", "spaces", "api", "docs", "blog", "settings", "papers", "learn"}
 
 
@@ -35,6 +39,11 @@ def model_ids(text: str) -> list[str]:
             if model_id.split("/", 1)[0].lower() in _NOT_MODELS:
                 continue
             if model_id not in found:
+                found.append(model_id)
+    if _LOADER.search(text):  # an id held in a variable or a constant that a loader is given
+        for match in _QUOTED.finditer(text):
+            model_id = match.group(1).rstrip(".")
+            if model_id.split("/", 1)[0].lower() not in _NOT_MODELS and model_id not in found:
                 found.append(model_id)
     order = {m: text.find(m) for m in found}
     return sorted(found, key=lambda m: order[m])

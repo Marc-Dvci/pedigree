@@ -58,9 +58,10 @@ def choose(conn: relate.Connection) -> list[str]:
     for licence in licences:
         found = rows(
             conn,
-            f"MATCH (:Licence {{id: $l}})<-[:DECLARES]-(:Model)<-[:DERIVED_FROM*1..{MAX_DEPTH}]-(m:Model) "
+            f"MATCH (:Licence {{id: $l}})<-[:DECLARES]-(a:Model) "
+            f"MATCH p = ANY SHORTEST (a)<-[:DERIVED_FROM]-{{1,{MAX_DEPTH}}}(m:Model) "
             "WHERE NOT m.author IN $owners AND m.in_snapshot AND coalesce(m.licence, 'none') <> $l "
-            "WITH DISTINCT m ORDER BY m.downloads DESC LIMIT $n RETURN m.id AS id",
+            "WITH DISTINCT m.id AS id, m.downloads AS d ORDER BY d DESC, id LIMIT $n RETURN id",
             {"l": licence, "owners": OWNERS, "n": PER_LICENCE},
         )
         chosen += [r["id"] for r in found if r["id"] not in chosen]
@@ -119,12 +120,20 @@ def chat(url: str, key: str, messages: list[dict[str, Any]], tools: list[dict[st
     body: dict[str, Any] = {"model": MODEL, "messages": messages, "temperature": 0}
     if tools:
         body["tools"] = tools
-    req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST")
-    req.add_header("Authorization", f"Bearer {key}")
-    req.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(req, timeout=180) as response:
-        result: dict[str, Any] = json.load(response)
-    return result
+    data = json.dumps(body).encode()
+    for attempt in range(4):
+        req = urllib.request.Request(url, data=data, method="POST")
+        req.add_header("Authorization", f"Bearer {key}")
+        req.add_header("Content-Type", "application/json")
+        try:
+            with urllib.request.urlopen(req, timeout=180) as response:
+                result: dict[str, Any] = json.load(response)
+            return result
+        except (TimeoutError, OSError):
+            if attempt == 3:
+                raise
+            time.sleep(10 * (attempt + 1))  # a slow or dropped call is retried; the request is the same
+    raise RuntimeError("unreachable")
 
 
 def tools_and_runner() -> tuple[list[dict[str, Any]], Any]:
@@ -227,10 +236,18 @@ def main() -> None:
         cards = json.loads((OUT / "cards.json").read_text(encoding="utf-8"))
         key, url = credentials()
         specs, run = tools_and_runner()
+        done = set()
+        if rfile.exists():  # resume: answers already recorded are kept
+            for line in rfile.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    r = json.loads(line)
+                    done.add((r["id"], r["mode"], r["repeat"]))
         with rfile.open("a", encoding="utf-8") as sink:
             for repeat in range(a.repeats):
                 for mode in ("card", "tools"):
                     for item in items:
+                        if (item["id"], mode, repeat) in done:
+                            continue
                         started = time.time()
                         result = ask(mode, item, cards.get(item["id"], ""), url, key, specs, run)
                         sink.write(json.dumps({"id": item["id"], "mode": mode, "repeat": repeat, "model": MODEL,

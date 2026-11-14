@@ -1,0 +1,179 @@
+[
+  {
+    "id": "mradermacher/Cthulhu-70B-v1-i1-GGUF",
+    "question": "Which licences' terms does the Hugging Face model mradermacher/Cthulhu-70B-v1-i1-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "cc-by-nc-4.0",
+      "llama3",
+      "llama3.1",
+      "llama3.3",
+      "mit"
+    ],
+    "declared": "llama3.3"
+  },
+  {
+    "id": "mradermacher/L3.1-MS-Astoria-70b-v2-heretic-i1-GGUF",
+    "question": "Which licences' terms does the Hugging Face model mradermacher/L3.1-MS-Astoria-70b-v2-heretic-i1-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "cc-by-nc-4.0",
+      "llama3.1"
+    ],
+    "declared": null
+  },
+  {
+    "id": "TheBloke/deepseek-coder-6.7B-instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model TheBloke/deepseek-coder-6.7B-instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "deepseek"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "TheBloke/deepseek-coder-33B-instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model TheBloke/deepseek-coder-33B-instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "deepseek"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "Comfy-Org/ltx-2",
+    "question": "Which licences' terms does the Hugging Face model Comfy-Org/ltx-2 inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "gemma"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "ggml-org/embeddinggemma-300M-GGUF",
+    "question": "Which licences' terms does the Hugging Face model ggml-org/embeddinggemma-300M-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "gemma"
+    ],
+    "declared": null
+  },
+  {
+    "id": "MaziyarPanahi/Meta-Llama-3-8B-Instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model MaziyarPanahi/Meta-Llama-3-8B-Instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3"
+    ],
+    "declared": null
+  },
+  {
+    "id": "lmstudio-community/Hermes-4-70B-MLX-4bit",
+    "question": "Which licences' terms does the Hugging Face model lmstudio-community/Hermes-4-70B-MLX-4bit inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3",
+      "llama3.1"
+    ],
+    "declared": null
+  },
+  {
+    "id": "casperhansen/llama-3.3-70b-instruct-awq",
+    "question": "Which licences' terms does the Hugging Face model casperhansen/llama-3.3-70b-instruct-awq inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3.1"
+    ],
+    "declared": "llama3.3"
+  },
+  {
+    "id": "zerofata/L3.3-GeneticLemonade-Final-v2-70B",
+    "question": "Which licences' terms does the Hugging Face model zerofata/L3.3-GeneticLemonade-Final-v2-70B inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3",
+      "llama3.1",
+      "llama3.3"
+    ],
+    "declared": "llama3"
+  },
+  {
+    "id": "hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF",
+    "question": "Which licences' terms does the Hugging Face model hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3.2"
+    ],
+    "declared": null
+  },
+  {
+    "id": "MaziyarPanahi/Llama-3.2-1B-Instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model MaziyarPanahi/Llama-3.2-1B-Instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3.2"
+    ],
+    "declared": null
+  },
+  {
+    "id": "MaziyarPanahi/Llama-3.3-70B-Instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model MaziyarPanahi/Llama-3.3-70B-Instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "llama3.1",
+      "llama3.3"
+    ],
+    "declared": null
+  },
+  {
+    "id": "lmstudio-community/Codestral-22B-v0.1-GGUF",
+    "question": "Which licences' terms does the Hugging Face model lmstudio-community/Codestral-22B-v0.1-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "mnpl"
+    ],
+    "declared": "apache-2.0"
+  },
+  {
+    "id": "bartowski/Codestral-22B-v0.1-GGUF",
+    "question": "Which licences' terms does the Hugging Face model bartowski/Codestral-22B-v0.1-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "mnpl"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "darkc0de/XORTRON.CriminalComputing.LARGE.2026.3",
+    "question": "Which licences' terms does the Hugging Face model darkc0de/XORTRON.CriminalComputing.LARGE.2026.3 inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "mrl"
+    ],
+    "declared": "wtfpl"
+  },
+  {
+    "id": "MaziyarPanahi/Mistral-Small-Instruct-2409-GGUF",
+    "question": "Which licences' terms does the Hugging Face model MaziyarPanahi/Mistral-Small-Instruct-2409-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "mrl"
+    ],
+    "declared": null
+  },
+  {
+    "id": "huihui-ai/Qwen2.5-72B-Instruct-abliterated",
+    "question": "Which licences' terms does the Hugging Face model huihui-ai/Qwen2.5-72B-Instruct-abliterated inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "qwen"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "bartowski/Qwen2.5-72B-Instruct-GGUF",
+    "question": "Which licences' terms does the Hugging Face model bartowski/Qwen2.5-72B-Instruct-GGUF inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "qwen"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "Comfy-Org/Qwen-Image-2.1",
+    "question": "Which licences' terms does the Hugging Face model Comfy-Org/Qwen-Image-2.1 inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "qwen-research"
+    ],
+    "declared": "other"
+  },
+  {
+    "id": "mudler/locate-anything.cpp-gguf",
+    "question": "Which licences' terms does the Hugging Face model mudler/locate-anything.cpp-gguf inherit from the models it was built on? List the licences declared by its ancestors, not its own.",
+    "answer": [
+      "qwen-research"
+    ],
+    "declared": "other"
+  }
+]

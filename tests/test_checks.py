@@ -30,7 +30,14 @@ def conn(tmp_path_factory: pytest.TempPathFactory) -> Iterator[relate.Connection
     parsed = parse_rows(ROWS)
     keep = descendants(parsed.models, ["meta-llama/Llama-3.1-8B", "Qwen/Qwen2.5-3B"])
     store = tmp_path_factory.mktemp("graph") / "pedigree.rl"
-    build(store, parsed.models, keep, ROOT / "sources", {"dataset": "test", "revision": "r"}, {"Qwen/Qwen2.5-3B": "qwen-research"})
+    build(
+        store,
+        parsed.models,
+        keep,
+        ROOT / "sources",
+        {"dataset": "test", "revision": "r"},
+        {"Qwen/Qwen2.5-3B": "qwen-research"},
+    )
     c = relate.connect(str(store), read_only=True)
     yield c
     c.close()

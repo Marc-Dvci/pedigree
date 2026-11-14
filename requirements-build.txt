@@ -1,0 +1,4 @@
+# Rebuilding pedigree.rl from the Hub's model-card snapshot (python -m pedigree build).
+-r requirements.txt
+pyarrow==26.0.1
+huggingface_hub==2.4.0

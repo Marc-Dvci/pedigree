@@ -69,7 +69,8 @@ def parse_rows(rows: Iterable[Mapping[str, object]]) -> Parsed:
     loops = 0
     for row in rows:
         model_id = str(row["modelId"])
-        tags = [str(t) for t in (row.get("tags") or [])]  # type: ignore[union-attr]
+        raw_tags = row.get("tags") or []
+        tags = [str(t) for t in raw_tags] if isinstance(raw_tags, list | tuple) else []
         licence, parents, self_loop = parse_tags(model_id, tags)
         loops += self_loop
         models[model_id] = Model(

@@ -1,9 +1,9 @@
 """Command line: `python -m pedigree <command>`.
 
-    build   read a pinned snapshot of the Hub's model cards and write the lineage graph to pedigree.rl
-    check   a model's pedigree: what its ancestors' licences require, and where its declared terms differ
-    hook    run as a coding-agent hook: check every model a command or new code would download
-    mcp     serve the checks to agents over MCP (stdio)
+build   read a pinned snapshot of the Hub's model cards and write the lineage graph to pedigree.rl
+check   a model's pedigree: what its ancestors' licences require, and where its declared terms differ
+hook    run as a coding-agent hook: check every model a command or new code would download
+mcp     serve the checks to agents over MCP (stdio)
 """
 
 from __future__ import annotations
@@ -46,9 +46,13 @@ def render(result: dict[str, Any]) -> str:
         kinds = sorted({d["kind"] for d in result["differs"]})
         lines.append(f"  Declared terms differ from upstream terms: {', '.join(kinds)}")
     for n in result["naming"]:
-        lines.append(f"  Name: {n['licence']} clause {n['clause']} asks derivative models to begin with '{n['prefix']}'")
+        lines.append(
+            f"  Name: {n['licence']} clause {n['clause']} asks derivative models to begin with '{n['prefix']}'"
+        )
     if result["non_commercial"]:
-        lines.append(f"  Non-commercial terms upstream: {', '.join(sorted({u['licence'] for u in result['non_commercial']}))}")
+        lines.append(
+            f"  Non-commercial terms upstream: {', '.join(sorted({u['licence'] for u in result['non_commercial']}))}"
+        )
     return "\n".join(lines)
 
 
@@ -96,7 +100,10 @@ def cmd_hook(a: argparse.Namespace) -> int:
         conn.close()
     if not reports:
         return 0
-    print("Pedigree: check these inherited licence terms before using the model.\n\n" + "\n\n".join(reports), file=sys.stderr)
+    print(
+        "Pedigree: check these inherited licence terms before using the model.\n\n" + "\n\n".join(reports),
+        file=sys.stderr,
+    )
     return 2
 
 
@@ -115,8 +122,15 @@ def cmd_build(a: argparse.Namespace) -> int:
         parsed.models,
         keep,
         ROOT / "sources",
-        {"dataset": DATASET, "revision": a.revision, "rows": len(rows), "families": a.family,
-         "roots": len(roots), "self_loops": parsed.self_loops, "built": dt.date.today().isoformat()},  # fmt: skip
+        {
+            "dataset": DATASET,
+            "revision": a.revision,
+            "rows": len(rows),
+            "families": a.family,
+            "roots": len(roots),
+            "self_loops": parsed.self_loops,
+            "built": dt.date.today().isoformat(),
+        },  # fmt: skip
         other,
     )
     print(json.dumps({"rows": len(rows), "roots": len(roots), **counts}))

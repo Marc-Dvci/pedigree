@@ -18,7 +18,7 @@ def shard_paths(revision: str) -> list[str]:
 
     fs = HfFileSystem()
     root = f"datasets/{DATASET}@{revision}/data"
-    return sorted(p for p in fs.ls(root, detail=False) if str(p).endswith(".parquet"))
+    return sorted(str(p) for p in fs.ls(root, detail=False) if str(p).endswith(".parquet"))
 
 
 def read_rows(revision: str, batch_rows: int = 50_000) -> Iterator[dict[str, Any]]:

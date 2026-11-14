@@ -33,7 +33,11 @@ def literal(value: Any) -> str:
 
 
 def _props(props: dict[str, Any]) -> str:
-    return "{" + ", ".join(f"{k}: {literal(v)}" for k, v in sorted(props.items()) if v is not None and _NAME.match(k)) + "}"
+    return (
+        "{"
+        + ", ".join(f"{k}: {literal(v)}" for k, v in sorted(props.items()) if v is not None and _NAME.match(k))
+        + "}"
+    )
 
 
 def pick(conn: relate.Connection, per_licence: int) -> list[str]:
@@ -70,7 +74,10 @@ def slice_script(conn: relate.Connection, ids: list[str]) -> str:
     snapshot = rows(conn, "MATCH (s:Snapshot) RETURN properties(s) AS p")
     out = ["CREATE INDEX model_id IF NOT EXISTS FOR (m:Model) ON (m.id);"]
     out += [f"CREATE (:Licence {_props(dict(r['p']))});" for r in licences]
-    out += [f"MATCH (l:Licence {{id: {literal(r['l'])}}}) CREATE (l)-[:REQUIRES]->(:Obligation {_props(dict(r['p']))});" for r in obligations]
+    out += [
+        f"MATCH (l:Licence {{id: {literal(r['l'])}}}) CREATE (l)-[:REQUIRES]->(:Obligation {_props(dict(r['p']))});"
+        for r in obligations
+    ]
     out += [f"CREATE (:Model {_props(dict(r['p']))});" for r in models]
     out += [
         f"MATCH (c:Model {{id: {literal(e['c'])}}}), (p:Model {{id: {literal(e['p'])}}}) "
@@ -82,7 +89,9 @@ def slice_script(conn: relate.Connection, ids: list[str]) -> str:
     return "\n".join(out) + "\n"
 
 
-def export(conn: relate.Connection, out_dir: Path, per_licence: int = 60, stats: dict[str, Any] | None = None) -> dict[str, int]:
+def export(
+    conn: relate.Connection, out_dir: Path, per_licence: int = 60, stats: dict[str, Any] | None = None
+) -> dict[str, int]:
     out_dir.mkdir(parents=True, exist_ok=True)
     ids = pick(conn, per_licence)
     (out_dir / "slice.cypher").write_text(slice_script(conn, ids), encoding="utf-8")

@@ -1,10 +1,10 @@
 """Write the lineage graph into one Relate file, `pedigree.rl`.
 
-    (:Model {id, author, name, licence, downloads, likes, created, library, pipeline, in_snapshot})
-    (:Model)-[:DERIVED_FROM {relation}]->(:Model)          finetune | adapter | merge | quantized | base
-    (:Model)-[:DECLARES]->(:Licence {id, name})
-    (:Licence)-[:REQUIRES]->(:Obligation {licence, kind, clause, text, source})
-    (:Snapshot {dataset, revision, rows, built})
+(:Model {id, author, name, licence, downloads, likes, created, library, pipeline, in_snapshot})
+(:Model)-[:DERIVED_FROM {relation}]->(:Model)          finetune | adapter | merge | quantized | base
+(:Model)-[:DECLARES]->(:Licence {id, name})
+(:Licence)-[:REQUIRES]->(:Obligation {licence, kind, clause, text, source})
+(:Snapshot {dataset, revision, rows, built})
 """
 
 from __future__ import annotations
@@ -70,7 +70,9 @@ def build(
     for model_id in keep:
         ids.update(models[model_id].parents if model_id in models else [])
 
-    nodes, edges, declares = [], [], []
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+    declares: list[dict[str, Any]] = []
     for model_id in sorted(ids):
         model = models.get(model_id)
         if model is None:
@@ -93,7 +95,15 @@ def build(
         conn.execute("CREATE INDEX licence_id IF NOT EXISTS FOR (l:Licence) ON (l.id)")
         conn.execute(
             "UNWIND $rows AS r CREATE (:Licence {id: r.licence, name: r.name})",
-            {"rows": [*licences, *({"licence": d, "name": d} for d in sorted({x["licence"] for x in declares} - {r["licence"] for r in licences}))]},
+            {
+                "rows": [
+                    *licences,
+                    *(
+                        {"licence": d, "name": d}
+                        for d in sorted({x["licence"] for x in declares} - {r["licence"] for r in licences})
+                    ),
+                ]
+            },
         )
         conn.execute(
             "UNWIND $rows AS r MATCH (l:Licence {id: r.licence}) "
@@ -122,4 +132,9 @@ def build(
         conn.execute("CREATE (:Snapshot $s)", {"s": dict(snapshot)})
     finally:
         conn.close()
-    return {"models": len(nodes), "derived_from": len(edges), "declares": len(declares), "obligations": len(obligations)}
+    return {
+        "models": len(nodes),
+        "derived_from": len(edges),
+        "declares": len(declares),
+        "obligations": len(obligations),
+    }

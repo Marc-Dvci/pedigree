@@ -44,7 +44,10 @@ def naming(conn: relate.Connection, licence: str, prefix: str, exclude: list[str
 
 def summary(conn: relate.Connection, exclude: list[str] | None = None) -> dict[str, Any]:
     """Every figure, for third-party models: the family owners' own models are left out."""
-    licences = [r["id"] for r in rows(conn, "MATCH (l:Licence)-[:REQUIRES]->(:Obligation {kind: 'naming'}) RETURN DISTINCT l.id AS id")]
+    licences = [
+        r["id"]
+        for r in rows(conn, "MATCH (l:Licence)-[:REQUIRES]->(:Obligation {kind: 'naming'}) RETURN DISTINCT l.id AS id")
+    ]
     restrictive = [
         r["id"]
         for r in rows(

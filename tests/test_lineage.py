@@ -15,7 +15,9 @@ def test_an_untyped_tag_alone_is_a_plain_base() -> None:
 
 
 def test_a_merge_keeps_every_parent() -> None:
-    _, parents, _ = parse_tags("u/m", ["base_model:merge:a/b", "base_model:merge:c/d", "base_model:a/b", "base_model:c/d"])
+    _, parents, _ = parse_tags(
+        "u/m", ["base_model:merge:a/b", "base_model:merge:c/d", "base_model:a/b", "base_model:c/d"]
+    )
     assert parents == {"a/b": "merge", "c/d": "merge"}
 
 

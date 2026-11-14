@@ -3,108 +3,77 @@
 **Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it.**
 
 [![Tests](https://github.com/Marc-Dvci/pedigree/actions/workflows/tests.yml/badge.svg)](https://github.com/Marc-Dvci/pedigree/actions/workflows/tests.yml)
-[![Decision core coverage](https://img.shields.io/badge/decision%20core%20coverage-{{COVERAGE}}%25-brightgreen)](tests/)
+[![Decision core coverage](https://img.shields.io/badge/decision%20core%20coverage-{{COVERAGE}}%25-brightgreen)](#run-it)
 [![CodeQL](https://github.com/Marc-Dvci/pedigree/actions/workflows/codeql.yml/badge.svg)](https://github.com/Marc-Dvci/pedigree/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Live demo](https://img.shields.io/badge/live-demo-0a7d6e)]({{LIVE_URL}})
+[![Live page](https://img.shields.io/badge/live-page-1d4ed8)]({{LIVE_URL}})
 
 [![Watch the film: Pedigree](docs/film_thumbnail.jpg)](https://www.youtube.com/watch?v={{VIDEO_ID}})
 
-**[Watch the film](https://www.youtube.com/watch?v={{VIDEO_ID}})**
+**[Watch the film](https://www.youtube.com/watch?v={{VIDEO_ID}})** · **[Open the live page]({{LIVE_URL}})**
 
-<!-- TEMPLATE: one human line from Marc, confirmed facts only. -->
+I led AI use cases for an internal-audit function, and the first question about any open model was what we were allowed to do with it.
 
-| Live demo | Track | Built with | Headline result |
+| Live page | Built with | Store | Headline result |
 |---|---|---|---|
-| [Open it]({{LIVE_URL}}) | {{TRACK}} | {{SPONSOR}} | {{HEADLINE}} |
+| [Open it]({{LIVE_URL}}) (Relate runs in the tab) | Relate by Neo4j 1.0.1: Python, CLI, MCP, WebAssembly | Single file, [`pedigree.rl`](pedigree.rl) | {{HEADLINE}} |
 
-[For judges](#for-judges) · [See it work](#see-it-work) · [How it works](#how-it-works) · [Results](#results) ·
-[Run it](#run-it)
+[For judges](#for-judges) · [See it work](#see-it-work) · [Use case](#use-case) · [How it uses Relate](#how-it-uses-relate) · [Agents](#agents) · [Results](#results) · [Run it](#run-it) · [Where the data lives](#where-the-data-lives)
 
 ## For judges
 
-<!-- TEMPLATE: one row per judging criterion, in the rules' order. Link code to exact lines at the release tag
-(blob/v1.0.0/<path>#L10-L40), and open every link once the tag exists. -->
-
 | Criterion | Where it is answered |
 |---|---|
-| {{CRITERION}} | [How it works](#how-it-works), [`app/core.py`](app/core.py) |
+| Relate and connected context | [How it uses Relate](#how-it-uses-relate): inherited terms are a variable-length walk up the family tree in Cypher ([`pedigree/checks.py`](pedigree/checks.py)), over {{MODELS}} models in one `.rl` file |
+| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; {{TEST_COUNT}} tests |
+| Usefulness | [Use case](#use-case), [Results](#results): figures on the whole Hugging Face snapshot |
+| Documentation and reproducibility | [Run it](#run-it) needs no keys; `python -m pedigree build --revision <commit>` rebuilds the graph from the pinned snapshot |
+| Creativity | Licence clauses as graph nodes that flow down `DERIVED_FROM` edges, checked at the moment an agent is about to download |
+| AI and agentic capabilities | [Agents](#agents): a hook that stops a coding agent before a download, MCP tools, a skill, and a measured comparison of an agent with and without the graph |
 
 ## See it work
 
-<!-- TEMPLATE: one GIF or screenshot per key moment, from the real product (scripts/make_gif.py). -->
+{{SEE_IT_WORK}}
 
-## The problem
+## Use case
 
-<!-- TEMPLATE: who it is for, the moment it matters, and the pain with one sourced number[^1]. -->
+{{USE_CASE}}
 
-## How it works
+## How it uses Relate
 
-![Pedigree, step by step: the input, the model step that reads it, the decision by fixed rules, and the output with
-its evidence](docs/architecture.png)
+- **Mode:** single file, [`pedigree.rl`](pedigree.rl).
+- **Why this mode:** the lineage graph is rebuilt from a daily public snapshot of the Hub, so it ships as one versioned file that a coding-agent hook, CI or a notebook opens read-only, with nothing to install or run.
+- **What the graph models:**
 
-Models read and phrase; plain code decides ([`app/core.py`](app/core.py)). The diagram's source is
-[`docs/architecture.mmd`](docs/architecture.mmd).
+```text
+(:Model {id, licence, downloads})-[:DERIVED_FROM {relation}]->(:Model)     finetune | adapter | merge | quantized
+(:Model)-[:DECLARES]->(:Licence {id, name})
+(:Licence)-[:REQUIRES]->(:Obligation {kind, clause, text, source})         attribution, naming, notice, use policy,
+                                                                           non-commercial, user threshold
+(:Snapshot {dataset, revision, rows})
+```
 
-## How {{SPONSOR}} is used
+## Agents
 
-| Product | What it does here | Why it is needed |
-|---|---|---|
-
-## What it will not do
-
-<!-- TEMPLATE: briefly: safety, approvals, refusals. -->
+{{AGENTS}}
 
 ## Results
 
-<!-- TEMPLATE: counts, before and after, and the command that reproduces each one. Then one line on what is real.
-Never call anything synthetic, fictional or invented. -->
+{{RESULTS}}
 
 ## Run it
 
-> [!TIP]
-> Nothing to install: the [live demo]({{LIVE_URL}}), or a ready environment in your browser:
-> [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Marc-Dvci/pedigree?quickstart=1)
+{{RUN_IT}}
 
-### With Docker
+## Where the data lives
 
-| | Command | Opens at | Needs |
-|---|---|---|---|
-| **Demo** | `docker compose up demo` | http://localhost:8080 | Nothing |
-| **Live** | `docker compose up app` | http://localhost:8787 | `cp .env.example .env`, then your keys |
-
-### From source
-
-Python 3.12.
-
-```sh
-python -m venv .venv
-. .venv/Scripts/activate           # Linux, macOS: . .venv/bin/activate; PowerShell: .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-APP_DEMO=1 python -m uvicorn app.server:app --port 8787    # http://localhost:8787, no keys
-```
-
-Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. {{TEST_COUNT}} tests run in a new random
-order each time, each within 30 seconds; they cover {{COVERAGE}}% of the decision core's lines and
-{{BRANCH_COVERAGE}}% of its branches, and CI fails below 90%. The CI run page splits them into unit, integration and
-end-to-end tests.
-
-## Claims
-
-| Claim | Code | Test |
-|---|---|---|
-| A fact is settled only when two independent sources agree | [`app/core.py`](app/core.py) | [`tests/test_core.py`](tests/test_core.py) |
-
-## Layout
-
-- `app/` the decision core (`core.py`) and the HTTP API (`server.py`)
-- `web/` the web page, served by the API on the same port
-- `tests/` the rules and the HTTP entry points
-- `docs/` the architecture diagram and its source
-- `scripts/` checks (links, placeholders) and figure tools (diagram, GIFs)
+| Path | What it holds |
+|---|---|
+| [`pedigree.rl`](pedigree.rl) | **The persistent Relate store**: one file with every model, its lineage, licences and obligations |
+| [`sources/`](sources/) | The obligations table with clause references and sources, and the licence names behind `license:other` |
+| [`evidence/`](evidence/) | Population figures and the agent evaluation |
+| [`web/data/`](web/data/) | The slice of the graph the browser page loads |
 
 ## License
 
-[MIT](LICENSE).
-
-[^1]: {{SOURCE}}
+[MIT](LICENSE). The obligations table quotes short passages of each licence it lists, with a link to the full text.

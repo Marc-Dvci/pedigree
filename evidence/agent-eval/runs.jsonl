@@ -1,0 +1,2 @@
+{"id": "mradermacher/Cthulhu-70B-v1-i1-GGUF", "mode": "card", "repeat": 0, "model": "qwen3.8-flash", "seconds": 179.5, "text": "{\"answer\": [\"llama3.3\", \"llama3.1\", \"llama3\"]}", "tool_calls": [], "usage": {"prompt_tokens": 2645, "completion_tokens": 20122}}
+{"id": "mradermacher/L3.1-MS-Astoria-70b-v2-heretic-i1-GGUF", "mode": "card", "repeat": 0, "model": "qwen3.8-flash", "seconds": 110.3, "text": "{\"answer\": [\"llama3.1\"]}", "tool_calls": [], "usage": {"prompt_tokens": 3087, "completion_tokens": 6233}}

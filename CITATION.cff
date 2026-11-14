@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use {{NAME}} or its evaluation, please cite it as below."
+message: "If you use Pedigree or its evaluation, please cite it as below."
 type: software
-title: "{{NAME}}: {{TAGLINE}}"
+title: "Pedigree: Pedigree tells you which licence terms an open model inherits from the models it was built on, before you or your coding agent download it."
 abstract: >-
   {{ABSTRACT}}
 authors:
@@ -10,7 +10,7 @@ authors:
 version: 1.0.0
 date-released: "{{RELEASE_DATE}}"
 license: MIT
-repository-code: "https://github.com/{{OWNER}}/{{REPO}}"
+repository-code: "https://github.com/Marc-Dvci/pedigree"
 url: "{{DEMO_URL}}"
 keywords:
   - "{{KEYWORD}}"

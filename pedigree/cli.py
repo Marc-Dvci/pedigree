@@ -41,12 +41,12 @@ def render(result: dict[str, Any]) -> str:
         lines.append(f"  Inherits {licence} from {nearest['ancestor']}")
         lines.append(f"    path: {' -> '.join(nearest['chain'])}")
         for item in items:
-            lines.append(f"    {item['kind']}: §{item['nearest']['clause']} “{item['nearest']['text']}”")
+            lines.append(f"    {item['kind']}: clause {item['nearest']['clause']}: {item['nearest']['text']}")
     if result["differs"]:
         kinds = sorted({d["kind"] for d in result["differs"]})
         lines.append(f"  Declared terms differ from upstream terms: {', '.join(kinds)}")
     for n in result["naming"]:
-        lines.append(f"  Name: {n['licence']} §{n['clause']} asks derivative models to begin with “{n['prefix']}”")
+        lines.append(f"  Name: {n['licence']} clause {n['clause']} asks derivative models to begin with '{n['prefix']}'")
     if result["non_commercial"]:
         lines.append(f"  Non-commercial terms upstream: {', '.join(sorted({u['licence'] for u in result['non_commercial']}))}")
     return "\n".join(lines)

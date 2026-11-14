@@ -1,0 +1,42 @@
+licence,kind,clause,text,source
+llama3,attribution,1.b.i(B),"prominently display ""Built with Meta Llama 3"" on a related website, user interface, blogpost, about page, or product documentation",https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3,naming,1.b.i,"include ""Llama 3"" at the beginning of any such AI model name",https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3,notice,"1.b.i(A), 1.b.iii",provide a copy of this Agreement with any such Llama Materials,https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3,use_policy,1.b.iv,adhere to the Acceptable Use Policy for the Llama Materials,https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3,user_threshold,2,greater than 700 million monthly active users ... you must request a license from Meta,https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3,no_other_llm,1.b.v,You will not use the Llama Materials ... to improve any other large language model (excluding Meta Llama 3 or derivative works thereof),https://raw.githubusercontent.com/meta-llama/llama3/main/LICENSE
+llama3.1,attribution,1.b.i(B),"prominently display ""Built with Llama"" on a related website, user interface, blogpost, about page, or product documentation",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE
+llama3.1,naming,1.b.i,"include ""Llama"" at the beginning of any such AI model name",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE
+llama3.1,notice,"1.b.i(A), 1.b.iii",provide a copy of this Agreement with any such Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE
+llama3.1,use_policy,1.b.iv,adhere to the Acceptable Use Policy for the Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE
+llama3.1,user_threshold,2,greater than 700 million monthly active users ... you must request a license from Meta,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_1/LICENSE
+llama3.2,attribution,1.b.i(B),"prominently display ""Built with Llama"" on a related website, user interface, blogpost, about page, or product documentation",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE
+llama3.2,naming,1.b.i,"include ""Llama"" at the beginning of any such AI model name",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE
+llama3.2,notice,"1.b.i(A), 1.b.iii",provide a copy of this Agreement with any such Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE
+llama3.2,use_policy,1.b.iv,adhere to the Acceptable Use Policy for the Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE
+llama3.2,user_threshold,2,greater than 700 million monthly active users ... you must request a license from Meta,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE
+llama3.3,attribution,1.b.i(B),"prominently display ""Built with Llama"" on a related website, user interface, blogpost, about page, or product documentation",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_3/LICENSE
+llama3.3,naming,1.b.i,"include ""Llama"" at the beginning of any such AI model name",https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_3/LICENSE
+llama3.3,notice,"1.b.i(A), 1.b.iii",provide a copy of this Agreement with any such Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_3/LICENSE
+llama3.3,use_policy,1.b.iv,adhere to the Acceptable Use Policy for the Llama Materials,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_3/LICENSE
+llama3.3,user_threshold,2,greater than 700 million monthly active users ... you must request a license from Meta,https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_3/LICENSE
+gemma,notice,3.1,provide all third party recipients of Gemma or Model Derivatives a copy of this Agreement,https://ai.google.dev/gemma/terms
+gemma,use_policy,"3.1, 3.2",include the use restrictions referenced in Section 3.2 as an enforceable provision in any agreement,https://ai.google.dev/gemma/terms
+qwen,attribution,5.b,"prominently display ""Built with Qwen"" or ""Improved using Qwen"" in the related product documentation",https://huggingface.co/Qwen/Qwen2.5-72B-Instruct/raw/main/LICENSE
+qwen,notice,"3.a, 3.c",give any other recipients of the Materials or derivative works a copy of this Agreement,https://huggingface.co/Qwen/Qwen2.5-72B-Instruct/raw/main/LICENSE
+qwen,user_threshold,4,"more than 100 million monthly active users, you shall request a license from us",https://huggingface.co/Qwen/Qwen2.5-72B-Instruct/raw/main/LICENSE
+qwen-research,non_commercial,"1.i, 2.a",FOR NON-COMMERCIAL PURPOSES ONLY,https://huggingface.co/Qwen/Qwen2.5-3B/raw/main/LICENSE
+qwen-research,attribution,4.b,"prominently display ""Built with Qwen"" or ""Improved using Qwen"" in the related product documentation",https://huggingface.co/Qwen/Qwen2.5-3B/raw/main/LICENSE
+qwen-research,notice,"3.a, 3.c",give any other recipients of the Materials or derivative works a copy of this Agreement,https://huggingface.co/Qwen/Qwen2.5-3B/raw/main/LICENSE
+mrl,non_commercial,"3.2, 4.3, 9","only use the Mistral Models, Derivatives ... and Outputs for Research Purposes",https://mistral.ai/licenses/MRL-0.1.md
+mrl,notice,2.2,make available a copy of this Agreement to third-party recipients,https://mistral.ai/licenses/MRL-0.1.md
+mnpl,non_commercial,"3.2, 4.3","only use the Mistral Models and Derivatives ... for testing, research, Personal, or evaluation purposes in Non-Production Environments",https://mistral.ai/licenses/MNPL-0.1.md
+mnpl,notice,2.2,"retain ... the following attribution notice: ""Licensed by Mistral AI under the Mistral AI Non-Production License""",https://mistral.ai/licenses/MNPL-0.1.md
+deepseek,use_policy,"4.a, 5",Use-based restrictions as referenced in paragraph 5 MUST be included as an enforceable provision,https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/main/LICENSE-MODEL
+deepseek,notice,4.b,give any Third Party recipients of the Model or Derivatives of the Model a copy of this License,https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/main/LICENSE-MODEL
+creativeml-openrail-m,use_policy,"4.a, 5",Use-based restrictions as referenced in paragraph 5 MUST be included as an enforceable provision,https://huggingface.co/spaces/CompVis/stable-diffusion-license/raw/main/license.txt
+creativeml-openrail-m,notice,4,give any Third Party recipients of the Model or Derivatives of the Model a copy of this License,https://huggingface.co/spaces/CompVis/stable-diffusion-license/raw/main/license.txt
+cc-by-nc-4.0,non_commercial,2(a)(1),"produce, reproduce, and Share Adapted Material for NonCommercial purposes only",https://creativecommons.org/licenses/by-nc/4.0/legalcode
+cc-by-nc-4.0,attribution,3(a)(1),identification of the creator(s) of the Licensed Material,https://creativecommons.org/licenses/by-nc/4.0/legalcode
+apache-2.0,notice,"4(a), 4(d)",give any other recipients of the Work or Derivative Works a copy of this License,https://www.apache.org/licenses/LICENSE-2.0
+mit,notice,MIT,The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.,https://opensource.org/license/mit

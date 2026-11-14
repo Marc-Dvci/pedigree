@@ -1,0 +1,15 @@
+licence,name,applies_when
+llama3,Meta Llama 3 Community License,license:llama3
+llama3.1,Llama 3.1 Community License,license:llama3.1
+llama3.2,Llama 3.2 Community License,license:llama3.2
+llama3.3,Llama 3.3 Community License,license:llama3.3
+gemma,Gemma Terms of Use,license:gemma
+qwen,Qwen LICENSE AGREEMENT,license:other with license_name qwen
+qwen-research,Qwen RESEARCH LICENSE AGREEMENT,license:other with license_name qwen-research
+mrl,Mistral AI Research License,license:other with license_name mrl
+mnpl,Mistral AI Non-Production License,license:other with license_name mnpl
+deepseek,DeepSeek License Agreement,license:other with license_name deepseek
+creativeml-openrail-m,CreativeML Open RAIL-M,license:creativeml-openrail-m
+cc-by-nc-4.0,Creative Commons Attribution-NonCommercial 4.0,license:cc-by-nc-4.0
+apache-2.0,Apache License 2.0,license:apache-2.0
+mit,MIT License,license:mit

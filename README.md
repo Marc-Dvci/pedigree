@@ -8,9 +8,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Live page](https://img.shields.io/badge/live-page-1d4ed8)](https://marc-dvci.github.io/pedigree/)
 
-[![Watch the film: Pedigree](docs/film_thumbnail.jpg)](https://www.youtube.com/watch?v={{VIDEO_ID}})
+[![Watch the film: Pedigree](docs/film_thumbnail.jpg)](https://www.youtube.com/watch?v=zvvA2iZa6aY)
 
-**[Watch the film](https://www.youtube.com/watch?v={{VIDEO_ID}})** · **[Open the live page](https://marc-dvci.github.io/pedigree/)**
+**[Watch the film](https://www.youtube.com/watch?v=zvvA2iZa6aY)** · **[Open the live page](https://marc-dvci.github.io/pedigree/)**
 
 I led AI use cases for an internal-audit function, and the first question about any open model was what we were allowed to do with it.
 

@@ -76,8 +76,21 @@ def cmd_check(a: argparse.Namespace) -> int:
     return 0
 
 
+def _seen_file(session_id: str) -> Path | None:
+    """Where the hook keeps the models it has already reported in one agent session."""
+    safe = "".join(c for c in session_id if c.isalnum() or c in "-_")
+    if not safe:
+        return None
+    import tempfile
+
+    return Path(os.environ.get("PEDIGREE_HOOK_STATE", tempfile.gettempdir())) / f"pedigree-hook-{safe}.txt"
+
+
 def cmd_hook(a: argparse.Namespace) -> int:
-    """Claude Code PreToolUse hook: reads the tool call on stdin, reports inherited terms on stderr (exit 2)."""
+    """Claude Code PreToolUse hook: reads the tool call on stdin, reports inherited terms on stderr (exit 2).
+
+    Each model is reported once per agent session: the first call stops so the agent can show the terms to the person,
+    and the call made after they agree goes through."""
     from pedigree.checks import check
     from pedigree.detect import model_ids
 
@@ -90,22 +103,36 @@ def cmd_hook(a: argparse.Namespace) -> int:
     ids = model_ids(text)
     if not ids or not a.store.exists():
         return 0
+    seen_file = _seen_file(str(payload.get("session_id") or ""))
+    seen = set(seen_file.read_text(encoding="utf-8").split()) if seen_file and seen_file.exists() else set()
     conn = _connect(a.store)
     reports = []
+    reported = []
     try:
         for model_id in ids:
             try:
                 result = check(conn, model_id)
             except KeyError:
                 continue
+            if result["model"] in seen:
+                continue
             if result["differs"] or result["naming"] or result["non_commercial"]:
                 reports.append(render(result))
+                reported.append(result["model"])
     finally:
         conn.close()
     if not reports:
         return 0
+    if seen_file:
+        try:
+            seen_file.write_text("\n".join(sorted(seen | set(reported))) + "\n", encoding="utf-8")
+        except OSError:
+            pass
     print(
-        "Pedigree: check these inherited licence terms before using the model.\n\n" + "\n\n".join(reports),
+        "Pedigree: check these inherited licence terms before using the model.\n\n"
+        + "\n\n".join(reports)
+        + "\n\nShow these terms to the person. Once they accept them, the same call goes through: Pedigree reports each"
+        " model once per session.",
         file=sys.stderr,
     )
     return 2

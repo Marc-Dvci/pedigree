@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import io
+import json
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import pytest
 import relate
@@ -26,18 +29,23 @@ ROWS = [
 
 
 @pytest.fixture(scope="module")
-def conn(tmp_path_factory: pytest.TempPathFactory) -> Iterator[relate.Connection]:
+def store(tmp_path_factory: pytest.TempPathFactory) -> Path:
     parsed = parse_rows(ROWS)
     keep = descendants(parsed.models, ["meta-llama/Llama-3.1-8B", "Qwen/Qwen2.5-3B"])
-    store = tmp_path_factory.mktemp("graph") / "pedigree.rl"
+    path = tmp_path_factory.mktemp("graph") / "pedigree.rl"
     build(
-        store,
+        path,
         parsed.models,
         keep,
         ROOT / "sources",
         {"dataset": "test", "revision": "r"},
         {"Qwen/Qwen2.5-3B": "qwen-research"},
     )
+    return path
+
+
+@pytest.fixture(scope="module")
+def conn(store: Path) -> Iterator[relate.Connection]:
     c = relate.connect(str(store), read_only=True)
     yield c
     c.close()
@@ -212,3 +220,38 @@ def test_a_declared_licence_differs_only_where_its_wording_differs(tmp_path: Pat
         ("llama3.1", "naming"),
     }
     assert {i["kind"] for i in result["inherited"]} >= {"notice", "use_policy", "user_threshold"}
+
+
+def test_an_id_typed_in_another_case_or_as_a_hub_url_finds_the_model(conn: relate.Connection) -> None:
+    assert checks.check(conn, "FAN/hermes-FT")["model"] == "fan/Hermes-ft"
+    assert checks.check(conn, "https://huggingface.co/fan/Hermes-ft")["model"] == "fan/Hermes-ft"
+    assert checks.check(conn, "hf.co/fan/hermes-ft/")["model"] == "fan/Hermes-ft"
+
+
+def _hook(
+    store: Path, state: Path, payload: dict[str, Any], capsys: pytest.CaptureFixture[str], mp: pytest.MonkeyPatch
+) -> tuple[int, str]:
+    from pedigree.cli import main
+
+    mp.setenv("PEDIGREE_HOOK_STATE", str(state))
+    mp.setattr("sys.stdin", io.StringIO(json.dumps(payload)))
+    code = main(["hook", "--store", str(store)])
+    return code, capsys.readouterr().err
+
+
+def test_the_hook_stops_a_download_once_per_session_then_lets_it_through(
+    store: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    call = {"session_id": "s1", "tool_name": "Bash", "tool_input": {"command": "hf download fan/Hermes-ft"}}
+    code, err = _hook(store, tmp_path, call, capsys, monkeypatch)
+    assert code == 2 and "fan/Hermes-ft" in err and "once per session" in err
+    code, err = _hook(store, tmp_path, call, capsys, monkeypatch)
+    assert (code, err) == (0, "")
+    code, err = _hook(store, tmp_path, {**call, "session_id": "s2"}, capsys, monkeypatch)
+    assert code == 2
+
+
+def test_the_hook_lets_through_a_call_that_names_no_model(
+    store: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assert _hook(store, tmp_path, {"tool_input": {"command": "ls -la"}}, capsys, monkeypatch) == (0, "")

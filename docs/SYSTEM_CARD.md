@@ -27,7 +27,7 @@ person; the wording on every surface is "declared terms differ from upstream ter
 
 ## Evaluation
 
-- **The checks.** 43 tests build small family trees with the real builder and check every rule: a fine-tune inherits
+- **The checks.** 46 tests build small family trees with the real builder and check every rule: a fine-tune inherits
   every obligation of its ancestors' licences, the nearest ancestor is named with its path, a merge inherits from both
   parents, a quantisation inherits but is not a newly trained model, and a licence named only in the card
   (`license:other`) claims no difference. They cover 99% of the decision core's lines and 95% of its branches.

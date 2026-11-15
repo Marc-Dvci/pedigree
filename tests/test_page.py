@@ -91,6 +91,12 @@ def test_a_model_outside_the_pages_slice_points_to_the_command_line(page: Page) 
     assert "is not in this page's slice of the graph" in page.inner_text("#verdict")
 
 
+def test_an_id_typed_in_another_case_or_as_a_hub_url_finds_the_model(page: Page) -> None:
+    page.fill("#model", "https://huggingface.co/nousresearch/hermes-3-llama-3.1-8b")
+    page.click("#form button[type=submit]")
+    assert page.inner_text("#verdict").startswith("NousResearch/Hermes-3-Llama-3.1-8B")
+
+
 def test_a_link_opens_the_model_it_names_and_a_choice_updates_the_link(browser: Any, base_url: str) -> None:
     pg = open_page(browser, base_url, "jinaai/jina-embeddings-v5-text-small-retrieval")
     assert pg.inner_text("#verdict").startswith("jinaai/jina-embeddings-v5-text-small-retrieval")

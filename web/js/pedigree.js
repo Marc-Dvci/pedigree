@@ -36,14 +36,25 @@ export class Graph {
   }
 }
 
-export function model(graph, id) {
+const HUB_URL = /^(?:https?:\/\/)?(?:www\.)?(?:huggingface\.co|hf\.co)\//i;
+
+// The graph's id for a model id as a person types it: a Hub URL works, and the Hub ignores case in ids.
+export function resolve(graph, text) {
+  const id = text.trim().replace(HUB_URL, "").replace(/^\/+|\/+$/g, "");
+  if (graph.rows("MATCH (m:Model {id: $id}) RETURN m.id AS id", { id }).length) return id;
+  const found = graph.rows("MATCH (m:Model) WHERE toLower(m.id) = $id RETURN m.id AS id", { id: id.toLowerCase() });
+  return found.length === 1 ? found[0].id : null;
+}
+
+export function model(graph, text) {
+  const id = resolve(graph, text);
+  if (id === null) return null;
   const found = graph.rows(
     "MATCH (m:Model {id: $id}) OPTIONAL MATCH (m)-[d:DERIVED_FROM]->(p:Model) " +
       "RETURN m.id AS id, m.name AS name, m.licence AS licence, m.downloads AS downloads, " +
       "collect({parent: p.id, relation: d.relation}) AS parents",
     { id },
   );
-  if (!found.length) return null;
   const row = found[0];
   row.parents = row.parents.filter((p) => p.parent !== null);
   return row;
@@ -59,9 +70,10 @@ export function startsWith(name, prefix) {
   return norm(name).startsWith(norm(prefix));
 }
 
-export function check(graph, id) {
-  const found = model(graph, id);
+export function check(graph, text) {
+  const found = model(graph, text);
   if (!found) return null;
+  const id = found.id;
   const upstream = graph.rows(graph.queries.inherited, { id });
   const declared = found.licence;
   // `other`: a licence named only in the card, possibly the upstream one; no difference is claimed.

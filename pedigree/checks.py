@@ -19,7 +19,23 @@ def rows(conn: relate.Connection, query: str, params: dict[str, Any] | None = No
     return [dict(r) for r in conn.execute(query, params or {})]
 
 
+HUB_URL = re.compile(r"^(?:https?://)?(?:www\.)?(?:huggingface\.co|hf\.co)/", re.IGNORECASE)
+
+
+def resolve(conn: relate.Connection, text: str) -> str | None:
+    """The graph's id for a model id as a person types it: a Hub URL works, and the Hub ignores case in ids."""
+    model_id = HUB_URL.sub("", text.strip()).strip("/")
+    if rows(conn, "MATCH (m:Model {id: $id}) RETURN m.id AS id", {"id": model_id}):
+        return model_id
+    found = rows(conn, "MATCH (m:Model) WHERE toLower(m.id) = $id RETURN m.id AS id", {"id": model_id.lower()})
+    return found[0]["id"] if len(found) == 1 else None
+
+
 def model(conn: relate.Connection, model_id: str) -> dict[str, Any] | None:
+    resolved = resolve(conn, model_id)
+    if resolved is None:
+        return None
+    model_id = resolved
     found = rows(
         conn,
         "MATCH (m:Model {id: $id}) OPTIONAL MATCH (m)-[d:DERIVED_FROM]->(p:Model) "
@@ -27,8 +43,6 @@ def model(conn: relate.Connection, model_id: str) -> dict[str, Any] | None:
         "collect({parent: p.id, relation: d.relation}) AS parents",
         {"id": model_id},
     )
-    if not found:
-        return None
     row = found[0]
     row["parents"] = [p for p in row["parents"] if p["parent"] is not None]
     return row
@@ -83,6 +97,7 @@ def check(conn: relate.Connection, model_id: str) -> dict[str, Any]:
     found = model(conn, model_id)
     if found is None:
         raise KeyError(model_id)
+    model_id = found["id"]
     upstream = inherited(conn, model_id)
     declared = found["licence"]
     # `other` is the Hub's id for a licence named only in the card: it may be the upstream licence itself, so the

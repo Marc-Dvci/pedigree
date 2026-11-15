@@ -6,5 +6,6 @@ one Relate file, `pedigree.rl`.
 - Agent skill: [`.claude/skills/pedigree/SKILL.md`](.claude/skills/pedigree/SKILL.md).
 - MCP server: `python -m pedigree mcp` (stdio), declared for Claude Code in [`.mcp.json`](.mcp.json).
 - Before code or a command downloads a model, run `python -m pedigree check <model id>`. The repository's Claude Code
-  hook does it for you on every Bash command and file edit.
+  hook does it for you on every Bash command and file edit, once per model and session: show the person the terms, and
+  once they accept them the same call goes through.
 - Tests: `python -m pytest`. Lint and types: `ruff check .`, `ruff format --check .`, `mypy`.

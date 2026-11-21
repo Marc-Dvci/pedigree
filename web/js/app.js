@@ -1,4 +1,4 @@
-import { Graph, check, tree } from "./pedigree.js";
+import { Graph, RELATE_VERSION, check, tree } from "./pedigree.js";
 
 // Registry stamp colours by licence family. Red is kept for terms that differ.
 const STAMP = [
@@ -118,9 +118,15 @@ function drawTerms(r) {
       <ul>${rows}</ul>
       <p class="src"><a href="${esc(near.source)}">Licence text</a></p></section>`;
   });
-  $("#terms").innerHTML = sections.length
-    ? sections.join("")
-    : "<p>No ancestor in this graph declares a licence with obligations.</p>";
+  $("#terms").innerHTML = sections.length ? sections.join("") : `<p>${esc(noInheritance(r))}</p>`;
+}
+
+// Why a model inherits nothing, as the command line says it (pedigree/cli.py, no_inheritance).
+function noInheritance(r) {
+  if (r.parents.length) return "No ancestor in this graph declares a licence with obligations.";
+  if (r.declared_unresolved) return "No ancestor in this graph: the licence named in its card sets its terms.";
+  if (r.declared) return `No ancestor in this graph: its own licence, ${r.declared}, sets its terms.`;
+  return "No ancestor in this graph, and no licence declared.";
 }
 
 function show(id) {
@@ -137,8 +143,8 @@ function show(id) {
   const differs = r.differs.length > 0;
   const kinds = [...new Set(r.differs.map((d) => KIND[d.kind] || d.kind))];
   $("#verdict").innerHTML = `<h2>${esc(r.model)}</h2>
-    <p>Declares <b>${esc(r.declared_unresolved ? "a licence named in its card (Hub id other)" : r.declared || "no licence tag")}</b>. Inherits terms from ${r.upstream_licences.length ? r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ") : "no licence with obligations"}.
-    ${differs ? `<span class="flag">Upstream terms the declared licence does not carry: ${kinds.map(esc).join(", ")}.</span>` : ""}</p>`;
+    <p>Declares <b>${esc(r.declared_unresolved ? "a licence named in its card (Hub id other)" : r.declared || "no licence tag")}</b>. ${r.upstream_licences.length ? `Inherits terms from ${r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ")}.` : r.parents.length ? "Inherits terms from no licence with obligations." : "Has no ancestor in this graph."}
+    ${differs ? `<span class="flag">Declared terms differ from upstream terms: ${kinds.map(esc).join(", ")}.</span>` : ""}</p>`;
   drawChart(tree(state.graph, r.model), differs);
   drawTerms(r);
 }
@@ -179,7 +185,7 @@ async function start() {
   const g = state.graph;
   const n = g.rows("MATCH (m:Model) RETURN count(m) AS n")[0].n;
   const snap = g.rows("MATCH (s:Snapshot) RETURN s.revision AS r, s.rows AS rows")[0] || {};
-  $("#status").textContent = `Relate 1.0.1 running in this tab (WebAssembly): ${n.toLocaleString()} models loaded in ${g.loadMs} ms, from a snapshot of ${Number(snap.rows || 0).toLocaleString()} Hub model cards (revision ${String(snap.r || "").slice(0, 7)}).`;
+  $("#status").textContent = `Relate ${RELATE_VERSION} running in this tab (WebAssembly): ${n.toLocaleString()} models loaded in ${g.loadMs} ms, from a snapshot of ${Number(snap.rows || 0).toLocaleString()} Hub model cards (revision ${String(snap.r || "").slice(0, 7)}).`;
   const ids = g.rows("MATCH (m:Model) WHERE m.downloads > 0 RETURN m.id AS id ORDER BY m.downloads DESC LIMIT 400").map((r) => r.id);
   $("#models").innerHTML = ids.map((i) => `<option value="${esc(i)}">`).join("");
   const examples = await fetch("data/examples.json").then((r) => (r.ok ? r.json() : [])).catch(() => []);

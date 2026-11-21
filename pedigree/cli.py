@@ -31,11 +31,22 @@ def _connect(store: Path) -> Any:
     return relate.connect(str(store), read_only=True)
 
 
+def no_inheritance(result: dict[str, Any]) -> str:
+    """Why a model inherits nothing: no ancestor in the graph (its own licence sets its terms), or none with terms."""
+    if result["parents"]:
+        return "No ancestor in the graph declares a licence with obligations."
+    if result.get("declared_unresolved"):
+        return "No ancestor in the graph: the licence named in its card sets its terms."
+    if result["declared"]:
+        return f"No ancestor in the graph: its own licence, {result['declared']}, sets its terms."
+    return "No ancestor in the graph, and no licence declared."
+
+
 def render(result: dict[str, Any]) -> str:
     declared = "a licence named in its card (Hub id other)" if result.get("declared_unresolved") else result["declared"]
     lines = [f"{result['model']}: declares {declared or 'no licence'}"]
     if not result["inherited"]:
-        lines.append("  No ancestor in the graph declares a licence with obligations.")
+        lines.append(f"  {no_inheritance(result)}")
         return "\n".join(lines)
     by_licence: dict[str, list[dict[str, Any]]] = {}
     for item in result["inherited"]:

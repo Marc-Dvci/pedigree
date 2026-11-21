@@ -98,6 +98,20 @@ def test_a_root_inherits_nothing(conn: relate.Connection) -> None:
     assert checks.check(conn, "meta-llama/Llama-3.1-8B")["inherited"] == []
 
 
+def test_a_model_that_inherits_nothing_says_why(conn: relate.Connection) -> None:
+    from pedigree.cli import render
+
+    root = checks.check(conn, "meta-llama/Llama-3.1-8B")
+    assert render(root).endswith("No ancestor in the graph: its own licence, llama3.1, sets its terms.")
+    qwen = render(checks.check(conn, "Qwen/Qwen2.5-3B"))  # Hub id other, named in the family's own card
+    assert qwen.endswith("No ancestor in the graph: its own licence, qwen-research, sets its terms.")
+    unnamed = render(dict(root, declared="other", declared_unresolved=True))
+    assert unnamed.endswith("No ancestor in the graph: the licence named in its card sets its terms.")
+    assert render(dict(root, declared=None)).endswith("No ancestor in the graph, and no licence declared.")
+    below = dict(root, parents=[{"parent": "a/b", "relation": "finetune"}])
+    assert render(below).endswith("No ancestor in the graph declares a licence with obligations.")
+
+
 def test_an_unknown_model_is_refused(conn: relate.Connection) -> None:
     with pytest.raises(KeyError):
         checks.check(conn, "nobody/nothing")

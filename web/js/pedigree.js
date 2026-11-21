@@ -1,6 +1,7 @@
 // A model's pedigree in the browser: the same Cypher and rules as pedigree/checks.py, on Relate's WebAssembly build.
 
-const RELATE_URL = "https://cdn.jsdelivr.net/npm/@relate/relate-wasm@1.0.1/relate.js";
+export const RELATE_VERSION = "1.2.0";
+const RELATE_URL = `https://cdn.jsdelivr.net/npm/@relate/relate-wasm@${RELATE_VERSION}/relate.js`;
 const TRAINED = ["finetune", "adapter", "merge"];
 
 export class Graph {

@@ -21,13 +21,13 @@ person; the wording on every surface is "declared terms differ from upstream ter
 |---|---|---|
 | Lineage and licences | `librarian-bots/model_cards_with_metadata`, commit `be6e076`; the Hub API for 775 gated family models | Every model, its parents and its declared licence |
 | Obligations | The licence texts, quoted with their source ([`sources/obligations.csv`](../sources/obligations.csv)) | What each licence passes to derivatives |
-| Checks | Cypher on Relate by Neo4j 1.0.1 | Decide every finding |
+| Checks | Cypher on Relate by Neo4j 1.2.0 | Decide every finding |
 | Agents | Any MCP client; the pre-download hook | Ask and act on the findings |
 | Agent evaluation | Qwen 3.8 Flash, Alibaba Cloud Model Studio | Measure answers from the card against answers with the tools |
 
 ## Evaluation
 
-- **The checks.** 46 tests build small family trees with the real builder and check every rule: a fine-tune inherits
+- **The checks.** 48 tests build small family trees with the real builder and check every rule: a fine-tune inherits
   every obligation of its ancestors' licences, the nearest ancestor is named with its path, a merge inherits from both
   parents, a quantisation inherits but is not a newly trained model, and a licence named only in the card
   (`license:other`) claims no difference. They cover 99% of the decision core's lines and 95% of its branches.

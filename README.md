@@ -16,7 +16,7 @@ I led AI use cases for an internal-audit function, and the first question about 
 
 | Live page | Built with | Store | Headline result |
 |---|---|---|---|
-| [Open it](https://marc-dvci.github.io/pedigree/) (Relate runs in the tab) | Relate by Neo4j 1.0.1: Python, CLI, MCP, WebAssembly | Single file, [`pedigree.rl`](pedigree.rl) | 12,038 models inherit Llama 3.1 terms; 2,516 declare them |
+| [Open it](https://marc-dvci.github.io/pedigree/) (Relate runs in the tab) | Relate by Neo4j 1.2.0: Python, CLI, MCP, WebAssembly | Single file, [`pedigree.rl`](pedigree.rl) | 12,038 models inherit Llama 3.1 terms; 2,516 declare them |
 
 [For judges](#for-judges) · [See it work](#see-it-work) · [Use case](#use-case) · [How it uses Relate](#how-it-uses-relate) · [Agents](#agents) · [Results](#results) · [Run it](#run-it) · [Where the data lives](#where-the-data-lives)
 
@@ -25,7 +25,7 @@ I led AI use cases for an internal-audit function, and the first question about 
 | Criterion | Where it is answered |
 |---|---|
 | Relate and connected context | [How it uses Relate](#how-it-uses-relate): inherited terms are a variable-length walk up the family tree in Cypher ([`pedigree/checks.py`](pedigree/checks.py)), over 213,928 models in one `.rl` file |
-| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 46 tests and 9 browser tests |
+| Functionality and completeness | [See it work](#see-it-work), [Run it](#run-it): command line, MCP server, a pre-download hook for coding agents, browser page, Docker images; 48 tests and 10 browser tests |
 | Usefulness | [Use case](#use-case), [Results](#results): figures on the whole Hugging Face snapshot |
 | Documentation and reproducibility | [Run it](#run-it) needs no keys; `python -m pedigree build --revision <commit>` rebuilds the graph from the pinned snapshot |
 | Creativity | Licence clauses as graph nodes that flow down `DERIVED_FROM` edges, checked at the moment an agent is about to download |
@@ -35,7 +35,7 @@ I led AI use cases for an internal-audit function, and the first question about 
 
 ![The page tracing three models: NousResearch/Hermes-3-Llama-3.1-8B with its Llama 3.1 parent; a merge of nine 70B models whose family tree carries Llama 3, 3.1 and 3.3 licence stamps; and Comfy-Org/Qwen-Image-2.1 below a research-only licence](docs/examples.gif)
 
-The page runs Relate 1.0.1 in the browser tab, compiled to WebAssembly, on a slice of the graph: the most downloaded
+The page runs Relate 1.2.0 in the browser tab, compiled to WebAssembly, on a slice of the graph: the most downloaded
 models under each licence with obligations, with all their ancestors (1,280 models). It runs the same Cypher as the
 command line, and a [parity check](web/test/parity.mjs) proves the two give the same answers.
 
@@ -108,7 +108,7 @@ from which ancestor, by which path, under which clause?**
    compacts it into `pedigree.rl`, 16.5 MB.
 4. **Checks.** A model's inherited terms are one Cypher statement: `ANY SHORTEST` paths up `DERIVED_FROM` to each
    ancestor, then the ancestor's licence and its obligations, keeping the nearest ancestor for each. A full check of
-   one model took 0.6 milliseconds at the median over 24 models, and 2.1 at the slowest
+   one model took 0.6 milliseconds at the median over 24 models, and 1.7 at the slowest
    ([`evidence/timings.json`](evidence/timings.json), `python experiments/timings.py`). Shortest paths matter here: one
    dense family of merges has 426 descendants and far more paths.
 
@@ -147,7 +147,7 @@ licence written out in full counts as its id when grading (`mistral-research-lic
 ## Results
 
 Figures on the pinned snapshot, for third-party models (the five families' own releases are left out). They are in
-[`evidence/stats.json`](evidence/stats.json), computed in Cypher by [`stats.py`](pedigree/stats.py) in 3.1 seconds.
+[`evidence/stats.json`](evidence/stats.json), computed in Cypher by [`stats.py`](pedigree/stats.py) in 2.1 seconds.
 
 | Licence | Models that inherit its terms | Declare the same licence | Declare another | Declare none |
 |---|---|---|---|---|
@@ -196,7 +196,7 @@ With Docker: `docker compose up web` serves the page at http://localhost:8080, a
 In Claude Code, the repository's [`.mcp.json`](.mcp.json) offers the `pedigree` MCP server and
 [`.claude/settings.json`](.claude/settings.json) installs the pre-download hook.
 
-The Relate CLI ([install](https://relatedb.ai/docs/get-started/install/)) opens the graph directly:
+The Relate CLI, version 1.2.0 like the Python package ([install](https://relatedb.ai/docs/get-started/install/)), opens the graph directly:
 
 ```sh
 relate --read-only --database pedigree.rl "MATCH (m:Model)-[:DECLARES]->(l:Licence) RETURN l.id, count(m) ORDER BY count(m) DESC LIMIT 10"
@@ -208,10 +208,10 @@ never downloaded): `pip install -r requirements-build.txt`, then
 `python -m pedigree build --revision be6e07669ad32d67b5b0859cf45dd16493fed4b3`. With the Relate CLI on the path, the
 build ends with `relate clone`, which compacts the file to 16.5 MB.
 
-Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 46 tests run in a new random
+Tests: `pip install -r requirements-dev.txt`, then `python -m pytest --cov`. 48 tests run in a new random
 order each time; they cover 99% of the decision core's lines and 95% of its branches.
 `cd web && npm ci && node test/parity.mjs` checks the browser code against the command line, 9 of 9 models.
-`python -m playwright install chromium`, then `python -m pytest -m e2e` drives the page in Chromium: 9 tests, including
+`python -m playwright install chromium`, then `python -m pytest -m e2e` drives the page in Chromium: 10 tests, including
 an axe-core scan with no serious accessibility violation.
 
 ## What it will not do

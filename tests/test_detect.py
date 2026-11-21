@@ -34,6 +34,14 @@ def test_each_download_form_is_found(text: str, ids: list[str]) -> None:
     assert model_ids(text) == ids
 
 
+def test_options_before_the_repository_id_are_skipped() -> None:
+    hermes = ["NousResearch/Hermes-3-Llama-3.1-8B"]
+    assert model_ids("hf download --local-dir models/hermes NousResearch/Hermes-3-Llama-3.1-8B") == hermes
+    assert model_ids("huggingface-cli download --repo-type model --quiet NousResearch/Hermes-3-Llama-3.1-8B") == hermes
+    assert model_ids('hf download --revision main "NousResearch/Hermes-3-Llama-3.1-8B" config.json') == hermes
+    assert model_ids("hf download --repo-type=dataset librarian-bots/model_cards_with_metadata") == []
+
+
 def test_dataset_and_space_links_are_not_models() -> None:
     assert model_ids("https://huggingface.co/datasets/foo/bar https://huggingface.co/spaces/a/b") == []
 

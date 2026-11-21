@@ -58,7 +58,7 @@ def page(browser: Any, base_url: str) -> Iterator[Page]:
 
 def test_relate_runs_in_the_tab_on_the_pinned_snapshot(page: Page) -> None:
     status = page.inner_text("#status")
-    assert status.startswith("Relate 1.0.1 running in this tab (WebAssembly):")
+    assert status.startswith("Relate 1.2.0 running in this tab (WebAssembly):")
     assert "from a snapshot of 914,842 Hub model cards (revision be6e076)" in status
 
 
@@ -66,7 +66,7 @@ def test_the_first_example_shows_which_upstream_terms_the_declared_licence_words
     verdict = page.inner_text("#verdict")
     assert verdict.startswith("NousResearch/Hermes-3-Llama-3.1-8B")
     assert "Declares llama3. Inherits terms from llama3.1." in verdict
-    assert "Upstream terms the declared licence does not carry: Attribution, Name." in verdict
+    assert "Declared terms differ from upstream terms: Attribution, Name." in verdict
 
 
 def test_a_merge_family_shows_four_generations_and_a_failed_naming_clause(page: Page) -> None:
@@ -81,8 +81,15 @@ def test_a_licence_named_only_in_the_card_claims_no_difference_but_shows_the_res
     page.click("#examples button >> text=Comfy-Org/Qwen-Image-2.1")
     verdict = page.inner_text("#verdict")
     assert "Declares a licence named in its card (Hub id other)." in verdict
-    assert "does not carry" not in verdict
+    assert "differ" not in verdict
     assert "FOR NON-COMMERCIAL PURPOSES ONLY" in page.inner_text("#terms")
+
+
+def test_a_family_release_says_its_own_licence_sets_its_terms(page: Page) -> None:
+    page.fill("#model", "meta-llama/Llama-3.1-8B")
+    page.click("#form button[type=submit]")
+    assert "Declares llama3.1. Has no ancestor in this graph." in page.inner_text("#verdict")
+    assert page.inner_text("#terms") == "No ancestor in this graph: its own licence, llama3.1, sets its terms."
 
 
 def test_a_model_outside_the_pages_slice_points_to_the_command_line(page: Page) -> None:

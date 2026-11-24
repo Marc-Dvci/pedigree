@@ -808,5 +808,12 @@
     "rows": 914842,
     "self_loops": 1235
   },
-  "seconds": 2.11
+  "seconds": 2.11,
+  "coverage": {
+    "models": 213928,
+    "traced_on_every_branch": 205775,
+    "with_a_branch_beyond_the_graph": 6662,
+    "base_models_not_in_snapshot": 1108,
+    "base_models_outside_the_trees": 383
+  }
 }

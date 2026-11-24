@@ -25,7 +25,13 @@ naming, notice, use policy, non-commercial terms, user thresholds), with the cla
 
 Before recommending or downloading a model, call check_model. Report what it inherits, from which ancestor, and where
 the declared terms differ from upstream terms. Quote the clause the tool returns; never paraphrase a licence from
-memory. Say "declared terms differ from upstream terms", not that anyone broke a licence.
+memory. Say "declared terms differ from upstream terms", not that anyone broke a licence. Present the terms as terms
+to review, and leave reading the licence to the person.
+
+Say what the graph cannot tell. When declared_terms is "unknown", the declared licence is named only in the card or
+is not in the terms table: say it could not be compared and list the upstream terms to review. When lineage is not
+"traced", or lineage_unknown lists ancestors, say the family tree continues where the graph does not follow it. A model
+the graph does not hold has an unknown pedigree here; the error says what the graph covers.
 """
 
 
@@ -56,7 +62,9 @@ def build_server(store: Path) -> MCPServer:
         try:
             return checks.check(conn, model_id)
         except KeyError:
-            return {"error": f"{model_id} is not in the lineage graph"}
+            from pedigree.cli import not_in_graph
+
+            return {"error": not_in_graph(model_id, checks.coverage(conn)), "coverage": checks.coverage(conn)}
         finally:
             conn.close()
 

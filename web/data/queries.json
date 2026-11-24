@@ -1,4 +1,12 @@
 {
   "inherited": "\nMATCH p = ANY SHORTEST (m:Model {id: $id})-[:DERIVED_FROM]->{1,30}(a:Model)\nMATCH (a)-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)\nWITH l, o, a, [n IN nodes(p) | n.id] AS chain, [r IN relationships(p) | r.relation] AS relations\nORDER BY size(chain) ASC, a.id ASC\nWITH l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, relations: relations, clause: o.clause, text: o.text, source: o.source})[0] AS nearest\nRETURN licence, kind, nearest\nORDER BY licence, kind\n",
-  "own": "\nMATCH (:Model {id: $id})-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)\nRETURN l.id AS licence, o.kind AS kind, o.text AS text\nORDER BY kind\n"
+  "own": "\nMATCH (:Model {id: $id})-[:DECLARES]->(l:Licence)-[:REQUIRES]->(o:Obligation)\nRETURN l.id AS licence, o.kind AS kind, o.text AS text\nORDER BY kind\n",
+  "beyond": "\nMATCH p = ANY SHORTEST (m:Model {id: $id})-[:DERIVED_FROM]->{1,30}(a:Model)\nWHERE a.in_snapshot = false OR (NOT EXISTS { (a)-[:DERIVED_FROM]->() } AND NOT a.author IN $families)\nRETURN a.id AS model, a.in_snapshot = false AS not_in_snapshot, length(p) AS steps\nORDER BY steps, model\n",
+  "families": [
+    "meta-llama",
+    "google",
+    "Qwen",
+    "mistralai",
+    "deepseek-ai"
+  ]
 }

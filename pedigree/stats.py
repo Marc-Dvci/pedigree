@@ -7,7 +7,37 @@ from typing import Any
 
 import relate
 
-from pedigree.checks import MAX_DEPTH, TRAINED, rows
+from pedigree.checks import FAMILIES, MAX_DEPTH, TRAINED, rows
+
+# Where declared family trees leave the graph, as pedigree/checks.py (BEYOND) reports it for one model.
+ENDS = "e.in_snapshot = false OR (NOT EXISTS { (e)-[:DERIVED_FROM]->() } AND NOT e.author IN $families)"
+
+
+def coverage(conn: relate.Connection) -> dict[str, int]:
+    """How many models the graph traces to the families' releases on every branch of their declared family tree."""
+    models = int(rows(conn, "MATCH (m:Model) RETURN count(m) AS n")[0]["n"])
+    ends = rows(
+        conn,
+        f"MATCH (e:Model) WHERE {ENDS} "
+        "RETURN count(e) AS ends, sum(CASE WHEN e.in_snapshot = false THEN 1 ELSE 0 END) AS not_in_snapshot",
+        {"families": FAMILIES},
+    )[0]
+    below = rows(
+        conn,
+        f"MATCH (e:Model) WHERE {ENDS} MATCH p = ANY SHORTEST (d:Model)-[:DERIVED_FROM]->{{1,{MAX_DEPTH}}}(e) "
+        "RETURN count(DISTINCT d) AS n",
+        {"families": FAMILIES},
+    )[0]
+    end_count, below_count = int(ends["ends"]), int(below["n"])
+    missing = int(ends["not_in_snapshot"] or 0)
+    return {
+        "models": models,
+        "traced_on_every_branch": models - end_count - below_count,
+        "with_a_branch_beyond_the_graph": below_count,
+        "base_models_not_in_snapshot": missing,
+        "base_models_outside_the_trees": end_count - missing,
+    }
+
 
 # Models below an ancestor that declares the licence (the ancestor itself excluded).
 UNDER = f"""

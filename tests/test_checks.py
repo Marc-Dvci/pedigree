@@ -184,13 +184,24 @@ def test_a_cypher_literal_is_written_for_every_property_type() -> None:
         literal({"a": 1})
 
 
-def test_a_licence_named_only_in_the_card_claims_no_difference(tmp_path: Path) -> None:
-    rows_ = [
-        {"modelId": "meta-llama/Llama-3.1-8B", "tags": ["license:llama3.1"]},
-        {"modelId": "fan/own-terms", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B", "license:other"]},
-    ]
-    parsed = parse_rows(rows_)
-    store = tmp_path / "p.rl"
+UNKNOWNS = [
+    {"modelId": "meta-llama/Llama-3.1-8B", "tags": ["license:llama3.1"]},
+    {"modelId": "fan/own-terms", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B", "license:other"]},
+    {"modelId": "fan/sa-terms", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B", "license:cc-by-nc-sa-4.0"]},
+    {"modelId": "fan/no-terms", "tags": ["base_model:finetune:meta-llama/Llama-3.1-8B"]},
+    {"modelId": "indie/original", "tags": ["license:mit"]},
+    {"modelId": "fan/mix", "tags": [
+        "base_model:merge:meta-llama/Llama-3.1-8B", "base_model:merge:ghost/gone", "base_model:merge:indie/original",
+        "license:llama3.1"]},
+]  # fmt: skip
+
+
+@pytest.fixture(scope="module")
+def unknowns(tmp_path_factory: pytest.TempPathFactory) -> Iterator[relate.Connection]:
+    """A graph with what Pedigree cannot tell: a licence named only in a card, one the terms table does not hold, a base
+    model with no card in the snapshot, and one outside the traced family trees."""
+    parsed = parse_rows(UNKNOWNS)
+    store = tmp_path_factory.mktemp("unknowns") / "p.rl"
     build(
         store,
         parsed.models,
@@ -199,13 +210,99 @@ def test_a_licence_named_only_in_the_card_claims_no_difference(tmp_path: Path) -
         {"dataset": "t"},
     )
     c = relate.connect(str(store), read_only=True)
-    try:
-        result = checks.check(c, "fan/own-terms")
-    finally:
-        c.close()
-    assert result["declared_unresolved"] is True
-    assert result["differs"] == []
+    yield c
+    c.close()
+
+
+def test_a_licence_named_only_in_the_card_leaves_the_declared_terms_unknown(unknowns: relate.Connection) -> None:
+    from pedigree.cli import needs_review, render
+
+    result = checks.check(unknowns, "fan/own-terms")
+    assert (result["declared_unresolved"], result["declared_terms"], result["differs"]) == (True, "unknown", [])
     assert result["upstream_licences"] == ["llama3.1"]  # what it inherits is still reported
+    assert "Declared terms unknown: the licence is named only in its card." in render(result)
+    assert needs_review(result)  # the hook reports it, so the terms reach the person
+
+
+def test_a_licence_the_terms_table_does_not_hold_leaves_the_declared_terms_unknown(unknowns: relate.Connection) -> None:
+    from pedigree.cli import needs_review, render
+
+    result = checks.check(unknowns, "fan/sa-terms")
+    assert (result["declared"], result["declared_terms"], result["differs"]) == ("cc-by-nc-sa-4.0", "unknown", [])
+    assert "Declared terms unknown: the terms table does not hold cc-by-nc-sa-4.0." in render(result)
+    assert needs_review(result)
+
+
+def test_a_model_that_declares_no_licence_carries_none_of_the_upstream_terms(unknowns: relate.Connection) -> None:
+    result = checks.check(unknowns, "fan/no-terms")
+    assert result["declared_terms"] == "none"
+    assert {d["kind"] for d in result["differs"]} == {i["kind"] for i in result["inherited"]}
+
+
+def test_where_the_family_tree_leaves_the_graph_is_named(unknowns: relate.Connection) -> None:
+    from pedigree.cli import render
+
+    result = checks.check(unknowns, "fan/mix")
+    assert result["lineage"] == "traced"
+    assert result["lineage_unknown"] == [
+        {"model": "ghost/gone", "not_in_snapshot": True, "steps": 1},
+        {"model": "indie/original", "not_in_snapshot": False, "steps": 1},
+    ]
+    text = render(result)
+    assert "Lineage unknown beyond ghost/gone: its card is not in the snapshot" in text
+    assert "Lineage unknown beyond indie/original: it sits outside the traced family trees" in text
+
+
+def test_a_base_model_outside_the_snapshot_or_the_trees_has_an_unknown_lineage(unknowns: relate.Connection) -> None:
+    from pedigree.cli import render
+
+    gone = checks.check(unknowns, "ghost/gone")
+    assert (gone["lineage"], gone["declared_terms"]) == ("not_in_snapshot", "unknown")
+    assert render(gone).splitlines() == [
+        "ghost/gone: its card is not in the snapshot",
+        "  Licence and lineage unknown: other cards name it as a base model, but the snapshot holds no card for it.",
+    ]
+    indie = checks.check(unknowns, "indie/original")
+    assert indie["lineage"] == "outside"
+    assert "No ancestor in the graph" not in render(indie)
+    assert "Lineage unknown: it sits outside the traced family trees" in render(indie)
+    # A family release with no base model is a root, not an unknown.
+    assert checks.check(unknowns, "meta-llama/Llama-3.1-8B")["lineage"] == "traced"
+
+
+def test_coverage_counts_the_models_traced_on_every_branch(unknowns: relate.Connection) -> None:
+    from pedigree import stats
+
+    # Seven models: ghost/gone has no card, indie/original sits outside the trees, and fan/mix merges both.
+    assert stats.coverage(unknowns) == {
+        "models": 7,
+        "traced_on_every_branch": 4,
+        "with_a_branch_beyond_the_graph": 1,
+        "base_models_not_in_snapshot": 1,
+        "base_models_outside_the_trees": 1,
+    }
+
+
+def test_a_model_the_graph_does_not_hold_is_reported_with_what_the_graph_covers(conn: relate.Connection) -> None:
+    from pedigree.cli import not_in_graph
+
+    text = not_in_graph("nobody/nothing", checks.coverage(conn))
+    assert text.startswith("nobody/nothing is not in the lineage graph, so its pedigree is unknown here.")
+    assert (
+        "meta-llama, google, Qwen, mistralai, deepseek-ai" in text
+        and f"{checks.coverage(conn)['models']:,} models" in text
+    )
+
+
+def test_the_mcp_tool_says_what_the_graph_covers_for_a_model_it_does_not_hold(store: Path) -> None:
+    import asyncio
+
+    from pedigree.mcp_server import build_server
+
+    server = build_server(store)
+    result = asyncio.run(server.call_tool("check_model", {"model_id": "nobody/nothing"}))
+    payload = json.dumps(result, default=str)
+    assert "pedigree is unknown here" in payload and "coverage" in payload
 
 
 def test_a_declared_licence_differs_only_where_its_wording_differs(tmp_path: Path) -> None:

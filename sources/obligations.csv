@@ -31,7 +31,7 @@ qwen-research,notice,"3.a, 3.c",give any other recipients of the Materials or de
 mrl,non_commercial,"3.2, 4.3, 9","only use the Mistral Models, Derivatives ... and Outputs for Research Purposes",https://mistral.ai/licenses/MRL-0.1.md
 mrl,notice,2.2,make available a copy of this Agreement to third-party recipients,https://mistral.ai/licenses/MRL-0.1.md
 mnpl,non_commercial,"3.2, 4.3","only use the Mistral Models and Derivatives ... for testing, research, Personal, or evaluation purposes in Non-Production Environments",https://mistral.ai/licenses/MNPL-0.1.md
-mnpl,notice,2.2,"retain ... the following attribution notice: ""Licensed by Mistral AI under the Mistral AI Non-Production License""",https://mistral.ai/licenses/MNPL-0.1.md
+mnpl,notice,2.2,"retain ... the following attribution notice ... ""Licensed by Mistral AI under the Mistral AI Non-Production License""",https://mistral.ai/licenses/MNPL-0.1.md
 deepseek,use_policy,"4.a, 5",Use-based restrictions as referenced in paragraph 5 MUST be included as an enforceable provision,https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/main/LICENSE-MODEL
 deepseek,notice,4.b,give any Third Party recipients of the Model or Derivatives of the Model a copy of this License,https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/main/LICENSE-MODEL
 creativeml-openrail-m,use_policy,"4.a, 5",Use-based restrictions as referenced in paragraph 5 MUST be included as an enforceable provision,https://huggingface.co/spaces/CompVis/stable-diffusion-license/raw/main/license.txt

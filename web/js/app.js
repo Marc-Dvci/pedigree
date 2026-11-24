@@ -42,8 +42,8 @@ function layout(root) {
   return { top, nodes, leaves: Math.max(leaf, 1) };
 }
 
-function stamp(x, y, lic) {
-  const text = lic ? lic.toUpperCase() : "NO LICENCE TAG";
+function stamp(x, y, lic, inSnapshot = true) {
+  const text = lic ? lic.toUpperCase() : inSnapshot ? "NO LICENCE TAG" : "CARD NOT IN SNAPSHOT";
   const w = 10 + text.length * 7.2;
   const c = colour(lic);
   const dash = lic ? "" : ' stroke-dasharray="3 3"';
@@ -80,7 +80,7 @@ function drawChart(root, differs) {
     const shown = name.length > 26 ? name.slice(0, 25) + "…" : name;
     parts.push(`<text x="${x}" y="${y - 18}" class="author">${esc(author)}</text>`);
     parts.push(`<text x="${x}" y="${y}" class="name${isRoot ? " root" : ""}"><title>${esc(item.n.id)}</title>${esc(shown)}</text>`);
-    parts.push(stamp(x, y + 8, item.n.licence));
+    parts.push(stamp(x, y + 8, item.n.licence, item.n.in_snapshot));
     if (isRoot && differs) parts.push(`<text x="${x}" y="${y + 46}" class="differs">declared terms differ from upstream terms</text>`);
     if (item.n.more) {
       parts.push(`<line x1="${x + 222}" y1="${y}" x2="${x + 240}" y2="${y}" class="rule"/>`);
@@ -112,13 +112,43 @@ function drawTerms(r) {
           <q>${esc(i.nearest.text)}</q>${note ? ` <span class="flag">${note}</span>` : ""}</li>`;
       })
       .join("");
+    const tag = same ? "" : r.declared_terms === "unknown" ? ' · <span class="unknown">compare with the declared licence</span>' : ' · <span class="flag">not the declared licence</span>';
     return `<section class="licence">
-      <h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)} <span class="from">from ${esc(near.ancestor)}${same ? "" : ' · <span class="flag">not the declared licence</span>'}</span></h3>
+      <h3><span class="dot" style="background:${colour(lic)}"></span>${esc(lic)} <span class="from">from ${esc(near.ancestor)}${tag}</span></h3>
       <p class="path">${near.chain.map(esc).join(" → ")}</p>
       <ul>${rows}</ul>
       <p class="src"><a href="${esc(near.source)}">Licence text</a></p></section>`;
   });
-  $("#terms").innerHTML = sections.length ? sections.join("") : `<p>${esc(noInheritance(r))}</p>`;
+  const none = r.lineage !== "traced" ? "" : `<p>${esc(noInheritance(r))}</p>`;
+  $("#terms").innerHTML = sections.length ? sections.join("") : none;
+}
+
+// Where the graph cannot follow the family tree, and declared terms it cannot compare, as the command line says them
+// (pedigree/cli.py: lineage_lines, declared_terms_line).
+const OWN_LINEAGE = {
+  not_in_snapshot: "Licence and lineage unknown: other cards name it as a base model, but the snapshot holds no card for it.",
+  outside: "Lineage unknown: it sits outside the traced family trees, so its own base models are not followed.",
+};
+
+function names(ids) {
+  return ids.length <= 3 ? ids.join(", ") : `${ids.slice(0, 3).join(", ")} and ${ids.length - 3} more`;
+}
+
+function lineageLines(r) {
+  const lines = r.lineage !== "traced" ? [OWN_LINEAGE[r.lineage]] : [];
+  const missing = r.lineage_unknown.filter((e) => e.not_in_snapshot).map((e) => e.model);
+  const outside = r.lineage_unknown.filter((e) => !e.not_in_snapshot).map((e) => e.model);
+  if (missing.length === 1) lines.push(`Lineage unknown beyond ${missing[0]}: its card is not in the snapshot.`);
+  else if (missing.length) lines.push(`Lineage unknown beyond ${missing.length} ancestors whose cards are not in the snapshot: ${names(missing)}.`);
+  if (outside.length === 1) lines.push(`Lineage unknown beyond ${outside[0]}: it sits outside the traced family trees.`);
+  else if (outside.length) lines.push(`Lineage unknown beyond ${outside.length} ancestors outside the traced family trees: ${names(outside)}.`);
+  return lines;
+}
+
+function declaredTermsLine(r) {
+  if (r.declared_terms !== "unknown" || !r.inherited.length) return null;
+  if (r.declared_unresolved) return "Declared terms unknown: the licence is named only in its card. Compare it with the upstream terms below.";
+  return `Declared terms unknown: the terms table does not hold ${r.declared}. Compare it with the upstream terms below.`;
 }
 
 // Why a model inherits nothing, as the command line says it (pedigree/cli.py, no_inheritance).
@@ -132,7 +162,7 @@ function noInheritance(r) {
 function show(id) {
   const r = check(state.graph, id.trim());
   if (!r) {
-    $("#verdict").innerHTML = `<p>${esc(id)} is not in this page's slice of the graph. The command line and the MCP server cover every model in the snapshot.</p>`;
+    $("#verdict").innerHTML = `<p>${esc(id)} is not in this page's slice of the graph. The command line and the MCP server check all 213,928 models of the family trees rooted in releases by ${esc((state.graph.queries.families || []).join(", "))}; a model outside them has an unknown pedigree.</p>`;
     $("#chart").innerHTML = "";
     $("#terms").innerHTML = "";
     return;
@@ -142,9 +172,17 @@ function show(id) {
   history.replaceState(null, "", `${location.pathname}?${params}`);
   const differs = r.differs.length > 0;
   const kinds = [...new Set(r.differs.map((d) => KIND[d.kind] || d.kind))];
+  const unknown = declaredTermsLine(r);
+  const declares =
+    r.lineage === "not_in_snapshot" ? "Its card is not in the snapshot." : `Declares <b>${esc(r.declared_unresolved ? "a licence named in its card (Hub id other)" : r.declared || "no licence tag")}</b>.`;
+  const inherits = r.upstream_licences.length
+    ? `Inherits terms from ${r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ")}.`
+    : r.lineage !== "traced" ? "" : r.parents.length ? "Inherits terms from no licence with obligations." : "Has no ancestor in this graph.";
+  const notes = lineageLines(r).map((l) => `<span class="unknown">${esc(l)}</span>`).join(" ");
   $("#verdict").innerHTML = `<h2>${esc(r.model)}</h2>
-    <p>Declares <b>${esc(r.declared_unresolved ? "a licence named in its card (Hub id other)" : r.declared || "no licence tag")}</b>. ${r.upstream_licences.length ? `Inherits terms from ${r.upstream_licences.map((l) => `<b>${esc(l)}</b>`).join(", ")}.` : r.parents.length ? "Inherits terms from no licence with obligations." : "Has no ancestor in this graph."}
-    ${differs ? `<span class="flag">Declared terms differ from upstream terms: ${kinds.map(esc).join(", ")}.</span>` : ""}</p>`;
+    <p>${declares} ${inherits}
+    ${differs ? `<span class="flag">Declared terms differ from upstream terms: ${kinds.map(esc).join(", ")}.</span>` : ""}
+    ${unknown ? `<span class="unknown">${esc(unknown)}</span>` : ""}</p>${notes ? `<p class="coverage">${notes}</p>` : ""}`;
   drawChart(tree(state.graph, r.model), differs);
   drawTerms(r);
 }

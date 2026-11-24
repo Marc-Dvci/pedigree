@@ -18,9 +18,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from pedigree.checks import FAMILIES
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORE = ROOT / "pedigree.rl"
-FAMILIES = ["meta-llama", "google", "Qwen", "mistralai", "deepseek-ai"]
 
 
 def _connect(store: Path) -> Any:
@@ -42,12 +43,63 @@ def no_inheritance(result: dict[str, Any]) -> str:
     return "No ancestor in the graph, and no licence declared."
 
 
+OWN_LINEAGE = {
+    "not_in_snapshot": "Licence and lineage unknown: other cards name it as a base model, but the snapshot holds no card for it.",
+    "outside": "Lineage unknown: it sits outside the traced family trees, so its own base models are not followed.",
+}
+
+
+def _names(ids: list[str]) -> str:
+    return ", ".join(ids) if len(ids) <= 3 else f"{', '.join(ids[:3])} and {len(ids) - 3} more"
+
+
+def lineage_lines(result: dict[str, Any]) -> list[str]:
+    """Where the graph cannot follow the declared family tree: the model itself, or ancestors beyond which it stops."""
+    lines = []
+    if result.get("lineage", "traced") != "traced":
+        lines.append(f"  {OWN_LINEAGE[result['lineage']]}")
+    ends = result.get("lineage_unknown") or []
+    missing = [e["model"] for e in ends if e["not_in_snapshot"]]
+    outside = [e["model"] for e in ends if not e["not_in_snapshot"]]
+    if len(missing) == 1:
+        lines.append(f"  Lineage unknown beyond {missing[0]}: its card is not in the snapshot")
+    elif missing:
+        lines.append(
+            f"  Lineage unknown beyond {len(missing)} ancestors whose cards are not in the snapshot: {_names(missing)}"
+        )
+    if len(outside) == 1:
+        lines.append(f"  Lineage unknown beyond {outside[0]}: it sits outside the traced family trees")
+    elif outside:
+        lines.append(
+            f"  Lineage unknown beyond {len(outside)} ancestors outside the traced family trees: {_names(outside)}"
+        )
+    return lines
+
+
+def declared_terms_line(result: dict[str, Any]) -> str | None:
+    """The declared terms Pedigree cannot compare: a licence named only in the card, or one its terms table lacks."""
+    if result.get("declared_terms") != "unknown" or not result["inherited"]:
+        return None
+    if result.get("declared_unresolved"):
+        return (
+            "  Declared terms unknown: the licence is named only in its card. Compare it with the upstream terms above."
+        )
+    return (
+        f"  Declared terms unknown: the terms table does not hold {result['declared']}."
+        " Compare it with the upstream terms above."
+    )
+
+
 def render(result: dict[str, Any]) -> str:
     declared = "a licence named in its card (Hub id other)" if result.get("declared_unresolved") else result["declared"]
     lines = [f"{result['model']}: declares {declared or 'no licence'}"]
+    if result.get("lineage") == "not_in_snapshot":
+        lines = [f"{result['model']}: its card is not in the snapshot"]
+    if result.get("lineage", "traced") != "traced" and not result["inherited"]:
+        return "\n".join(lines + lineage_lines(result))
     if not result["inherited"]:
         lines.append(f"  {no_inheritance(result)}")
-        return "\n".join(lines)
+        return "\n".join(lines + lineage_lines(result))
     by_licence: dict[str, list[dict[str, Any]]] = {}
     for item in result["inherited"]:
         by_licence.setdefault(item["licence"], []).append(item)
@@ -60,6 +112,9 @@ def render(result: dict[str, Any]) -> str:
     if result["differs"]:
         kinds = sorted({d["kind"] for d in result["differs"]})
         lines.append(f"  Declared terms differ from upstream terms: {', '.join(kinds)}")
+    unknown = declared_terms_line(result)
+    if unknown:
+        lines.append(unknown)
     for n in result["naming"]:
         lines.append(
             f"  Name: {n['licence']} clause {n['clause']} asks derivative models to begin with '{n['prefix']}'"
@@ -68,23 +123,39 @@ def render(result: dict[str, Any]) -> str:
         lines.append(
             f"  Non-commercial terms upstream: {', '.join(sorted({u['licence'] for u in result['non_commercial']}))}"
         )
-    return "\n".join(lines)
+    return "\n".join(lines + lineage_lines(result))
+
+
+def not_in_graph(model_id: str, coverage: dict[str, Any]) -> str:
+    """What to say about a model the graph does not hold: its pedigree is unknown here, and what the graph covers."""
+    snapshot = f"{str(coverage.get('revision', ''))[:7]}, {coverage.get('built', '')}".strip(", ")
+    return (
+        f"{model_id} is not in the lineage graph, so its pedigree is unknown here. The graph holds the "
+        f"{coverage['models']:,} models of the family trees rooted in releases by {', '.join(coverage['families'])}, "
+        f"as their cards declare them in the Hub snapshot ({snapshot})."
+    )
 
 
 def cmd_check(a: argparse.Namespace) -> int:
-    from pedigree.checks import check
+    from pedigree.checks import check, coverage
 
     conn = _connect(a.store)
     try:
         try:
             result = check(conn, a.model)
         except KeyError:
-            print(f"{a.model} is not in the lineage graph", file=sys.stderr)
+            print(not_in_graph(a.model, coverage(conn)), file=sys.stderr)
             return 2
     finally:
         conn.close()
     print(json.dumps(result, indent=2) if a.json else render(result))
     return 0
+
+
+def needs_review(result: dict[str, Any]) -> bool:
+    """The hook reports a model whose upstream terms the declared licence does not carry, or cannot be compared with."""
+    unknown = result.get("declared_terms") == "unknown" and bool(result["inherited"])
+    return bool(result["differs"] or result["naming"] or result["non_commercial"] or unknown)
 
 
 def _seen_file(session_id: str) -> Path | None:
@@ -127,7 +198,7 @@ def cmd_hook(a: argparse.Namespace) -> int:
                 continue
             if result["model"] in seen:
                 continue
-            if result["differs"] or result["naming"] or result["non_commercial"]:
+            if needs_review(result):
                 reports.append(render(result))
                 reported.append(result["model"])
     finally:

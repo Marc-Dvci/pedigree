@@ -25,6 +25,9 @@ for (const want of expected) {
     inherited: r.inherited.map((i) => [i.licence, i.kind, i.nearest.ancestor, i.nearest.chain]).sort(),
     differs: r.differs.map((d) => [d.licence, d.kind]).sort(),
     naming: r.naming.map((n) => [n.licence, n.prefix]).sort(),
+    declared_terms: r.declared_terms,
+    lineage: r.lineage,
+    lineage_unknown: r.lineage_unknown.map((e) => [e.model, e.not_in_snapshot, e.steps]),
   };
   if (JSON.stringify(got) !== JSON.stringify(want)) {
     failures += 1;

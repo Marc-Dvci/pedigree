@@ -67,7 +67,10 @@
         "llama3.1",
         "Llama"
       ]
-    ]
+    ],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "RedHatAI/Llama-3.2-1B-Instruct-FP8-dynamic",
@@ -123,7 +126,10 @@
       ]
     ],
     "differs": [],
-    "naming": []
+    "naming": [],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "jinaai/jina-embeddings-v5-text-small-retrieval",
@@ -168,7 +174,10 @@
         "notice"
       ]
     ],
-    "naming": []
+    "naming": [],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "Comfy-Org/Qwen-Image-2.1",
@@ -206,7 +215,10 @@
       ]
     ],
     "differs": [],
-    "naming": []
+    "naming": [],
+    "declared_terms": "unknown",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "Comfy-Org/ltx-2",
@@ -235,7 +247,10 @@
       ]
     ],
     "differs": [],
-    "naming": []
+    "naming": [],
+    "declared_terms": "unknown",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "zerofata/L3.3-GeneticLemonade-Final-v2-70B",
@@ -436,6 +451,35 @@
       [
         "llama3.3",
         "Llama"
+      ]
+    ],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": [
+      [
+        "EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.1",
+        true,
+        2
+      ],
+      [
+        "OpenBuddy/openbuddy-llama3.3-70b-v24.1-131k",
+        true,
+        2
+      ],
+      [
+        "crestf411/L3.1-nemotron-sunfall-v0.7.0",
+        true,
+        2
+      ],
+      [
+        "nbeerbower/llama3.1-kartoffeldes-70B",
+        true,
+        2
+      ],
+      [
+        "tokyotech-llm/Llama-3.1-Swallow-70B-Instruct-v0.3",
+        true,
+        2
       ]
     ]
   },
@@ -664,7 +708,66 @@
         "notice"
       ]
     ],
-    "naming": []
+    "naming": [],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": [
+      [
+        "ReadyArt/Forgotten-Safeword-70B-v5.0",
+        true,
+        2
+      ],
+      [
+        "Sao10K/L3.1-70B-Euryale-v2.2",
+        false,
+        2
+      ],
+      [
+        "TheDrummer/Fallen-Llama-3.3-R1-70B-v1",
+        false,
+        2
+      ],
+      [
+        "sophosympatheia/Strawberrylemonade-L3-70B-v1.2",
+        true,
+        2
+      ],
+      [
+        "mlabonne/Llama-3-70B-Instruct-abliterated-LORA",
+        true,
+        3
+      ],
+      [
+        "EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.1",
+        true,
+        4
+      ],
+      [
+        "OpenBuddy/openbuddy-llama3.3-70b-v24.1-131k",
+        true,
+        4
+      ],
+      [
+        "Sao10K/L3.1-70B-Hanami-x1",
+        false,
+        4
+      ],
+      [
+        "crestf411/L3.1-nemotron-sunfall-v0.7.0",
+        true,
+        4
+      ],
+      [
+        "nbeerbower/llama3.1-kartoffeldes-70B",
+        true,
+        4
+      ],
+      [
+        "tokyotech-llm/Llama-3.1-Swallow-70B-Instruct-v0.3",
+        true,
+        4
+      ]
+    ]
   },
   {
     "model": "casperhansen/llama-3.3-70b-instruct-awq",
@@ -720,7 +823,10 @@
       ]
     ],
     "differs": [],
-    "naming": []
+    "naming": [],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": []
   },
   {
     "model": "meta-llama/Llama-3.1-8B-Instruct",
@@ -776,6 +882,213 @@
       ]
     ],
     "differs": [],
-    "naming": []
+    "naming": [],
+    "declared_terms": "compared",
+    "lineage": "traced",
+    "lineage_unknown": []
+  },
+  {
+    "model": "Unbabel/Tower-Plus-72B",
+    "declared": "cc-by-nc-sa-4.0",
+    "upstream_licences": [
+      "qwen"
+    ],
+    "inherited": [
+      [
+        "qwen",
+        "attribution",
+        "Qwen/Qwen2.5-72B",
+        [
+          "Unbabel/Tower-Plus-72B",
+          "Qwen/Qwen2.5-72B"
+        ]
+      ],
+      [
+        "qwen",
+        "notice",
+        "Qwen/Qwen2.5-72B",
+        [
+          "Unbabel/Tower-Plus-72B",
+          "Qwen/Qwen2.5-72B"
+        ]
+      ],
+      [
+        "qwen",
+        "user_threshold",
+        "Qwen/Qwen2.5-72B",
+        [
+          "Unbabel/Tower-Plus-72B",
+          "Qwen/Qwen2.5-72B"
+        ]
+      ]
+    ],
+    "differs": [],
+    "naming": [],
+    "declared_terms": "unknown",
+    "lineage": "traced",
+    "lineage_unknown": []
+  },
+  {
+    "model": "tokyotech-llm/Llama-3.1-Swallow-70B-Instruct-v0.3",
+    "declared": null,
+    "upstream_licences": [],
+    "inherited": [],
+    "differs": [],
+    "naming": [],
+    "declared_terms": "unknown",
+    "lineage": "not_in_snapshot",
+    "lineage_unknown": []
+  },
+  {
+    "model": "Casual-Autopsy/L3-Umbral-Mind-RP-v3.0-8B",
+    "declared": null,
+    "upstream_licences": [],
+    "inherited": [],
+    "differs": [],
+    "naming": [],
+    "declared_terms": "none",
+    "lineage": "outside",
+    "lineage_unknown": []
+  },
+  {
+    "model": "DavidAU/L3-Dark-Planet-8B",
+    "declared": null,
+    "upstream_licences": [
+      "cc-by-nc-4.0",
+      "llama3"
+    ],
+    "inherited": [
+      [
+        "cc-by-nc-4.0",
+        "attribution",
+        "Sao10K/L3-8B-Stheno-v3.2",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "Sao10K/L3-8B-Stheno-v3.2"
+        ]
+      ],
+      [
+        "cc-by-nc-4.0",
+        "non_commercial",
+        "Sao10K/L3-8B-Stheno-v3.2",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "Sao10K/L3-8B-Stheno-v3.2"
+        ]
+      ],
+      [
+        "llama3",
+        "attribution",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ],
+      [
+        "llama3",
+        "naming",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ],
+      [
+        "llama3",
+        "no_other_llm",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ],
+      [
+        "llama3",
+        "notice",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ],
+      [
+        "llama3",
+        "use_policy",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ],
+      [
+        "llama3",
+        "user_threshold",
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        [
+          "DavidAU/L3-Dark-Planet-8B",
+          "meta-llama/Meta-Llama-3-8B-Instruct"
+        ]
+      ]
+    ],
+    "differs": [
+      [
+        "cc-by-nc-4.0",
+        "attribution"
+      ],
+      [
+        "cc-by-nc-4.0",
+        "non_commercial"
+      ],
+      [
+        "llama3",
+        "attribution"
+      ],
+      [
+        "llama3",
+        "naming"
+      ],
+      [
+        "llama3",
+        "no_other_llm"
+      ],
+      [
+        "llama3",
+        "notice"
+      ],
+      [
+        "llama3",
+        "use_policy"
+      ],
+      [
+        "llama3",
+        "user_threshold"
+      ]
+    ],
+    "naming": [
+      [
+        "llama3",
+        "Llama 3"
+      ]
+    ],
+    "declared_terms": "none",
+    "lineage": "traced",
+    "lineage_unknown": [
+      [
+        "Hastagaras/Jamet-8B-L3-MK.V-Blackroot",
+        true,
+        1
+      ],
+      [
+        "NeverSleep/Llama-3-Lumimaid-8B-v0.1-OAS",
+        true,
+        1
+      ],
+      [
+        "Sao10K/L3-8B-Stheno-v3.2",
+        false,
+        1
+      ]
+    ]
   }
 ]

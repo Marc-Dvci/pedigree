@@ -4,7 +4,9 @@
 
 Pedigree is for the engineer, the coding agent and the reviewer who decide whether an open model from Hugging Face can
 go into a product. It reports which licence terms a model inherits from the models it was built on, from which
-ancestor, by which path and under which clause.
+ancestor, by which path and under which clause. It reads the family trees that model cards declare for the releases of
+Meta Llama, Google, Qwen, Mistral AI and DeepSeek (213,928 models, Hub snapshot of 14 November 2026), and the terms of
+14 licences.
 
 ## Uses it is built for
 
@@ -12,8 +14,11 @@ ancestor, by which path and under which clause.
 - Reviewing the models a product already uses.
 - Measuring, across the Hub, how inherited terms are declared.
 
-Its findings point a person to the clause and the licence text. Reading the licence and deciding remain with that
-person; the wording on every surface is "declared terms differ from upstream terms".
+Its findings are terms to review: they point a person to the clause and the licence text. Reading the licence and
+deciding remain with that person; the wording on every surface is "declared terms differ from upstream terms". Where the
+graph cannot tell, every surface says so: a declared licence it holds no terms for reads "declared terms unknown", and
+an ancestor whose card is not in the snapshot, or one outside the traced family trees, is named where the lineage is
+unknown.
 
 ## Models and data
 
@@ -27,13 +32,17 @@ person; the wording on every surface is "declared terms differ from upstream ter
 
 ## Evaluation
 
-- **The checks.** 48 tests build small family trees with the real builder and check every rule: a fine-tune inherits
+- **The checks.** 58 tests build small family trees with the real builder and check every rule: a fine-tune inherits
   every obligation of its ancestors' licences, the nearest ancestor is named with its path, a merge inherits from both
-  parents, a quantisation inherits but is not a newly trained model, and a licence named only in the card
-  (`license:other`) claims no difference. They cover 99% of the decision core's lines and 95% of its branches.
-- **The browser.** The page's code gives the Python answers on 7 of 7 models ([`web/test/parity.mjs`](../web/test/parity.mjs)).
-- **The agent.** On 21 real models, three times each, Qwen 3.8 Flash named the licences a model inherits correctly 27
-  times in 63 from the model's card, and 63 times in 63 with the Pedigree tools. On the 5 models whose family tree
+  parents, a quantisation inherits but is not a newly trained model, a licence named only in the card or one the terms
+  table does not hold leaves the declared terms unknown, and a base model outside the snapshot or the traced trees is
+  named. They cover 99% of the decision core's lines and 96% of its branches.
+- **The browser.** The page's code gives the Python answers on 13 of 13 models ([`web/test/parity.mjs`](../web/test/parity.mjs)).
+- **The sources.** All 41 quoted obligations are found word for word in the licence texts at their source URLs, and all
+  34 lineage edges on the paths of the 21 evaluated models match the models' live Hub cards
+  ([`evidence/sources-check.json`](../evidence/sources-check.json)).
+- **The agent.** On 21 real models, three times each, Qwen 3.8 Flash named the licences a model inherits as the graph
+  does 27 times in 63 from the model's card, and 63 times in 63 with the Pedigree tools. On the 5 models whose family tree
   carries more than one licence: 0 of 15 from the card, 15 of 15 with the tools. The answers come from the graph and
   were committed before the model ran ([`evidence/agent-eval/`](../evidence/agent-eval/)).
 

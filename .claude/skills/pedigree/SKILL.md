@@ -25,6 +25,12 @@ Without the MCP server: `python -m pedigree check <model id>`.
 2. Report each inherited licence with the ancestor that declares it, the path, and the clause the tool returns. Quote
    the clause; never paraphrase a licence from memory.
 3. Where the declared licence differs from upstream terms, say "declared terms differ from upstream terms" and list
-   the obligations. Do not say that anyone broke a licence.
+   the obligations as terms to review. Do not say that anyone broke a licence; reading the licence stays with the
+   person.
 4. A naming finding means the licence asks derivative models to begin with a prefix (Llama 3.1 and later: "Llama").
-5. The graph is a snapshot of the Hub; `get_schema` gives its date and revision.
+5. Say what the graph cannot tell. `declared_terms: "unknown"` means the declared licence is named only in the card or
+   is not in the terms table: say it could not be compared, and list the upstream terms to review. A `lineage` other
+   than `traced`, or ancestors in `lineage_unknown`, means the family tree continues where the graph does not follow
+   it: name them. A model the graph does not hold has an unknown pedigree here.
+6. The graph is one pinned snapshot of the Hub: the family trees that model cards declare for releases by
+   meta-llama, google, Qwen, mistralai and deepseek-ai. `get_schema` gives its date and revision.

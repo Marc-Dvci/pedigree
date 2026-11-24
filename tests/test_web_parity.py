@@ -27,6 +27,10 @@ MODELS = [
     "mradermacher/Cthulhu-70B-v1-i1-GGUF",
     "casperhansen/llama-3.3-70b-instruct-awq",
     "meta-llama/Llama-3.1-8B-Instruct",
+    "Unbabel/Tower-Plus-72B",  # declares a licence the terms table does not hold
+    "tokyotech-llm/Llama-3.1-Swallow-70B-Instruct-v0.3",  # named as a base model, no card in the snapshot
+    "Casual-Autopsy/L3-Umbral-Mind-RP-v3.0-8B",  # outside the traced family trees
+    "DavidAU/L3-Dark-Planet-8B",  # an ancestor outside the traced family trees
 ]
 
 
@@ -47,6 +51,9 @@ def python_answers() -> list[dict[str, Any]]:
                     ),
                     "differs": sorted([d["licence"], d["kind"]] for d in r["differs"]),
                     "naming": sorted([n["licence"], n["prefix"]] for n in r["naming"]),
+                    "declared_terms": r["declared_terms"],
+                    "lineage": r["lineage"],
+                    "lineage_unknown": [[e["model"], e["not_in_snapshot"], e["steps"]] for e in r["lineage_unknown"]],
                 }
             )
         return out

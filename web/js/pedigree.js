@@ -52,8 +52,8 @@ export function model(graph, text) {
   if (id === null) return null;
   const found = graph.rows(
     "MATCH (m:Model {id: $id}) OPTIONAL MATCH (m)-[d:DERIVED_FROM]->(p:Model) " +
-      "RETURN m.id AS id, m.name AS name, m.licence AS licence, m.downloads AS downloads, " +
-      "collect({parent: p.id, relation: d.relation}) AS parents",
+      "RETURN m.id AS id, m.name AS name, m.author AS author, m.licence AS licence, m.downloads AS downloads, " +
+      "m.in_snapshot AS in_snapshot, collect({parent: p.id, relation: d.relation}) AS parents",
     { id },
   );
   const row = found[0];
@@ -77,11 +77,19 @@ export function check(graph, text) {
   const id = found.id;
   const upstream = graph.rows(graph.queries.inherited, { id });
   const declared = found.licence;
-  // `other`: a licence named only in the card, possibly the upstream one; no difference is claimed.
+  // `other`: a licence named only in the card, possibly the upstream one.
   const unresolved = declared === "other";
+  const ownTerms = graph.rows(graph.queries.own, { id });
+  const families = graph.queries.families || [];
+  // The model's own lineage is unknown when its card is not in the snapshot, or when it sits outside the families' trees.
+  const lineage =
+    found.in_snapshot === false ? "not_in_snapshot" : !found.parents.length && !families.includes(found.author) ? "outside" : "traced";
+  // Declared terms are compared only when the terms table holds the declared licence; otherwise they are unknown.
+  const declaredTerms =
+    lineage === "not_in_snapshot" ? "unknown" : declared === null || declared === undefined ? "none" : ownTerms.length ? "compared" : "unknown";
   // An upstream term differs when the declared licence has no term of the same kind in the same words.
-  const carried = new Set(graph.rows(graph.queries.own, { id }).map((o) => JSON.stringify([o.kind, o.text])));
-  const differs = unresolved ? [] : upstream.filter((u) => !carried.has(JSON.stringify([u.kind, u.nearest.text])));
+  const carried = new Set(ownTerms.map((o) => JSON.stringify([o.kind, o.text])));
+  const differs = declaredTerms === "unknown" ? [] : upstream.filter((u) => !carried.has(JSON.stringify([u.kind, u.nearest.text])));
   const naming = [];
   const own = new Set(found.parents.map((p) => p.relation));
   if (TRAINED.some((r) => own.has(r))) {
@@ -94,6 +102,9 @@ export function check(graph, text) {
     model: found.id,
     declared,
     declared_unresolved: unresolved,
+    declared_terms: declaredTerms,
+    lineage,
+    lineage_unknown: graph.rows(graph.queries.beyond, { id, families }),
     parents: found.parents,
     inherited: upstream,
     differs,
@@ -108,7 +119,7 @@ export function check(graph, text) {
 export function tree(graph, id, depth = 3) {
   const node = (mid, level, seen) => {
     const m = model(graph, mid);
-    const out = { id: mid, licence: m ? m.licence : null, downloads: m ? m.downloads : 0, parents: [], more: 0 };
+    const out = { id: mid, licence: m ? m.licence : null, in_snapshot: m ? m.in_snapshot !== false : false, downloads: m ? m.downloads : 0, parents: [], more: 0 };
     if (m && level >= depth) out.more = m.parents.length;
     if (!m || level >= depth || seen.has(mid)) return out;
     const next = new Set(seen).add(mid);

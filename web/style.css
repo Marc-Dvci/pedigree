@@ -1,5 +1,6 @@
 /* Pedigree: a stud-book identity. White ground, a serif register face, thin black rules, each licence a small
-   registry stamp in its own ink; red only where declared terms differ from upstream terms. */
+   registry stamp in its own ink; red only where declared terms differ from upstream terms, amber where the graph
+   cannot tell. */
 :root {
   color-scheme: light;
   --ink: #16181b;
@@ -7,6 +8,7 @@
   --rule: #16181b;
   --hair: #d9dce0;
   --red: #b91c1c;
+  --amber: #92400e;
   --paper: #ffffff;
   font-family: "Spectral", Georgia, "Times New Roman", serif;
   font-size: 18px;
@@ -38,6 +40,9 @@ form button[type="submit"]:focus-visible, .chips button:focus-visible { outline:
 #verdict { margin-top: 26px; }
 #verdict h2 { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 1.25rem; }
 .flag { color: var(--red); }
+.unknown { color: var(--amber); }
+#verdict .coverage { font-size: 0.88rem; margin-top: -6px; }
+#verdict .coverage .unknown { display: block; }
 .chart-wrap { overflow-x: auto; margin: 10px 0 0; padding-bottom: 6px; }
 #chart { display: block; max-width: 100%; height: auto; }
 #chart .more { font: 12px "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); }

@@ -77,10 +77,19 @@ def test_a_merge_family_shows_four_generations_and_a_failed_naming_clause(page: 
     assert "the name does not begin with “Llama 3”" in page.inner_text("#terms")
 
 
-def test_a_licence_named_only_in_the_card_claims_no_difference_but_shows_the_research_terms(page: Page) -> None:
+def test_a_merge_family_names_the_ancestors_whose_cards_are_not_in_the_snapshot(page: Page) -> None:
+    page.click("#examples button >> text=zerofata/L3.3-GeneticLemonade-Final-v2-70B")
+    assert "Lineage unknown beyond 5 ancestors whose cards are not in the snapshot" in page.inner_text("#verdict")
+    assert page.locator("#chart .stamp >> text=CARD NOT IN SNAPSHOT").count() >= 1
+
+
+def test_a_licence_named_only_in_the_card_leaves_the_declared_terms_unknown_and_shows_the_research_terms(
+    page: Page,
+) -> None:
     page.click("#examples button >> text=Comfy-Org/Qwen-Image-2.1")
     verdict = page.inner_text("#verdict")
     assert "Declares a licence named in its card (Hub id other)." in verdict
+    assert "Declared terms unknown: the licence is named only in its card." in verdict
     assert "differ" not in verdict
     assert "FOR NON-COMMERCIAL PURPOSES ONLY" in page.inner_text("#terms")
 

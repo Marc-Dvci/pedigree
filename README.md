@@ -48,8 +48,8 @@ command line, and a [parity check](web/test/parity.mjs) proves the two give the 
 
 A merge carries every parent's terms. This one declares `llama3`; its family tree also carries Llama 3.1 and Llama
 3.3, whose attribution and naming clauses are worded differently, and its name does not begin with "Llama 3" as the
-Llama 3 licence asks. Five of the merge's nine parents have no card in the snapshot: the page names them, and their own
-terms stay unknown.
+Llama 3 licence asks. Five of the merge's nine parents have no card in the snapshot; the page names them and stamps
+them on the chart.
 
 ![The inherited terms of NousResearch/Hermes-3-Llama-3.1-8B: Llama 3.1 from meta-llama/Llama-3.1-8B, with each obligation, its clause and quoted text](docs/page-terms.png)
 
@@ -115,7 +115,7 @@ from which ancestor, by which path, under which clause?**
 4. **Checks.** A model's inherited terms are one Cypher statement: `ANY SHORTEST` paths up `DERIVED_FROM` to each
    ancestor, then the ancestor's licence and its obligations, keeping the nearest ancestor for each. The same walk names
    where the declared tree leaves the graph: an ancestor whose card is not in the snapshot, or one outside the traced
-   family trees. A declared licence the terms table does not hold is reported as unknown, never compared. A full check
+   family trees. It reports a declared licence that the terms table does not hold as unknown. A full check
    of one model took 0.9 milliseconds at the median over 24 models, and 2.6 at the slowest
    ([`evidence/timings.json`](evidence/timings.json), `python experiments/timings.py`). Shortest paths matter here: one
    dense family of merges has 426 descendants and far more paths.
@@ -132,7 +132,7 @@ RETURN l.id AS licence, o.kind AS kind, collect({ancestor: a.id, chain: chain, c
 
 | Piece | What the agent gets |
 |---|---|
-| Pre-download hook ([`.claude/settings.json`](.claude/settings.json)) | Before any Bash command or file edit, [`detect.py`](pedigree/detect.py) reads the command or code for nine download forms (`from_pretrained`, `pipeline`, `hf download`, `huggingface-cli download`, `snapshot_download`, `vllm serve`, `ollama run hf.co/...`, `-hf`), and returns the inherited terms of each model id it finds to the agent, including declared terms it cannot compare, once per model and session, so the call made after the person agrees goes through; [a real session](examples/agent-session.md) |
+| Pre-download hook ([`.claude/settings.json`](.claude/settings.json)) | Before any Bash command or file edit, [`detect.py`](pedigree/detect.py) reads the command or code for nine download forms (`from_pretrained`, `pipeline`, `hf download`, `huggingface-cli download`, `snapshot_download`, `vllm serve`, `ollama run hf.co/...`, `-hf`), and returns the inherited terms of each model id it finds to the agent, unknown declared terms included, once per model and session, so the call made after the person agrees goes through; [a real session](examples/agent-session.md) |
 | MCP server, `python -m pedigree mcp` ([`.mcp.json`](.mcp.json)) | `check_model`, `find_models`, `get_schema` and a read-only `read_cypher` |
 | Agent skill ([`.claude/skills/pedigree/SKILL.md`](.claude/skills/pedigree/SKILL.md), [`AGENTS.md`](AGENTS.md)) | When to check a model, and the rule to quote the clause the tool returns |
 
@@ -152,11 +152,11 @@ Five of the models carry more than one licence in their family tree, such as a L
 inherits Llama 3.1's terms. Reading the card, the model matched 0 of their 15 graph answers; with the tools, 15 of 15. A
 licence written out in full counts as its id when grading (`mistral-research-license` for `mrl`).
 
-**Checked against the sources.** The evaluation scores the model against the graph, and the graph itself is checked
-against its sources by [`experiments/verify_sources.py`](experiments/verify_sources.py)
+The evaluation scores the model against the graph. A second script,
+[`experiments/verify_sources.py`](experiments/verify_sources.py), checks the graph against its sources
 ([`evidence/sources-check.json`](evidence/sources-check.json), 24 November 2026). All 41 quoted obligations appear word
-for word in the licence texts at their source URLs, and all 34 lineage edges on the paths of the 21 evaluated models
-match the models' live Hub cards.
+for word in the licence texts at their source URLs. All 34 lineage edges on the paths of the 21 evaluated models match
+the models' live Hub cards.
 
 ## Results
 
@@ -177,8 +177,8 @@ fine-tunes, adapters and merges, 4,662 of 10,366 under Llama 3.1 do, 4,066 of 7,
 under Llama 3.3.
 
 The graph traces 205,775 of its 213,928 models to a family release on every branch of their declared tree. For 6,662
-others, a branch reaches a base model the graph does not follow, and the check names it: one of 1,108 base models that
-cards name but the snapshot holds no card for, or one of 383 outside the traced family trees.
+others, the check names the base model where a branch leaves the graph: one of 1,108 that cards name but the snapshot
+holds no card for, or one of 383 outside the traced family trees.
 
 Research-only and non-commercial terms travel too: 6,363 models sit below a model under the Qwen Research License, 758
 below the Mistral AI Research License, 16 below the Mistral AI Non-Production License and 1,280 below CC BY-NC 4.0.

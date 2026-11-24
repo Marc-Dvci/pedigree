@@ -16,9 +16,8 @@ Meta Llama, Google, Qwen, Mistral AI and DeepSeek (213,928 models, Hub snapshot 
 
 Its findings are terms to review: they point a person to the clause and the licence text. Reading the licence and
 deciding remain with that person; the wording on every surface is "declared terms differ from upstream terms". Where the
-graph cannot tell, every surface says so: a declared licence it holds no terms for reads "declared terms unknown", and
-an ancestor whose card is not in the snapshot, or one outside the traced family trees, is named where the lineage is
-unknown.
+graph cannot tell, every surface says so. A declared licence it holds no terms for reads "declared terms unknown". Each
+ancestor whose card is not in the snapshot, or that sits outside the traced family trees, is named.
 
 ## Models and data
 
